@@ -161,23 +161,6 @@ const errorHandler = (async function errorhandler(error, event) {
   return send(event, html);
 });
 
-const script = `
-if (!window.__NUXT_DEVTOOLS_TIME_METRIC__) {
-  Object.defineProperty(window, '__NUXT_DEVTOOLS_TIME_METRIC__', {
-    value: {},
-    enumerable: false,
-    configurable: true,
-  })
-}
-window.__NUXT_DEVTOOLS_TIME_METRIC__.appInit = Date.now()
-`;
-
-const _4Gvsc2wjl8 = (function(nitro) {
-  nitro.hooks.hook("render:html", (htmlContext) => {
-    htmlContext.head.push(`<script>${script}<\/script>`);
-  });
-});
-
 const rootDir = "D:/前端学习/vue-nuxt-demo";
 
 const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"}],"link":[],"style":[],"script":[],"noscript":[]};
@@ -267,8 +250,7 @@ function onConsoleLog(callback) {
 }
 
 const plugins = [
-  _4Gvsc2wjl8,
-_R6JOo239B2
+  _R6JOo239B2
 ];
 
 const _lazy_BaoCdJ = () => Promise.resolve().then(function () { return renderer$1; });
@@ -634,13 +616,15 @@ function cloneWithProxy(obj, overrides) {
 }
 const cachedEventHandler = defineCachedEventHandler;
 
+const defineAppConfig = (config) => config;
+
+const appConfig0 = defineAppConfig({});
+
 const inlineAppConfig = {
   "nuxt": {}
 };
 
-
-
-const appConfig = defuFn(inlineAppConfig);
+const appConfig = defuFn(appConfig0, inlineAppConfig);
 
 function getEnv(key, opts) {
   const envKey = snakeCase(key).toUpperCase();
