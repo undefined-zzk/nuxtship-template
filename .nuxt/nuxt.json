@@ -1,13 +1,7 @@
 {
-<<<<<<< HEAD
   "_hash": "NHYwMHh5hT",
   "project": {
     "rootDir": "E:/project/vue-nuxt-demo"
-=======
-  "_hash": "LcDFFh8Ne4",
-  "project": {
-    "rootDir": "D:/前端学习/vue-nuxt-demo"
->>>>>>> 96bafe269f6bbfd69cbf84b95e890037b45a0939
   },
   "versions": {
     "nuxt": "3.15.1"

@@ -1,6 +1,12 @@
-declare module 'nitropack' {
-  interface NitroRouteConfig {
-    appMiddleware?: string | string[] | Record<string, boolean>
+import type { NavigationGuard } from 'vue-router'
+export type MiddlewareKey = "auth"
+declare module "../../node_modules/nuxt/dist/pages/runtime/composables" {
+  interface PageMeta {
+    middleware?: MiddlewareKey | NavigationGuard | Array<MiddlewareKey | NavigationGuard>
   }
 }
-export {}
+declare module 'nitropack' {
+  interface NitroRouteConfig {
+    appMiddleware?: MiddlewareKey | MiddlewareKey[] | Record<MiddlewareKey, boolean>
+  }
+}
