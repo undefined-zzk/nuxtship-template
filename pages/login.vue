@@ -1,10 +1,20 @@
 <script setup lang="ts">
-// definePageMeta({
-//     layout: false
-// })
-useHead({
-    title:'登录'
+definePageMeta({
+    pageTransition: {
+        onBeforeEnter(el: any) {
+            el.style.backgroundColor = 'red'
+        },
+        onEnter: (el, done) => {
+        },
+        onAfterEnter: (el) => {
+        }
+    },
+
 })
+useHead({
+    title: '登录'
+})
+
 const changeLayout = () => {
     setPageLayout('custom')
 }
