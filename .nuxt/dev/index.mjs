@@ -576,7 +576,7 @@ const _inlineRuntimeConfig = {
     }
   },
   "public": {
-    "apiUrl": "hpp://localhost:8989"
+    "baseUrl": ""
   },
   "icon": {
     "serverKnownCssClasses": []

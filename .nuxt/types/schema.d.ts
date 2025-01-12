@@ -158,7 +158,7 @@ declare module 'nuxt/schema' {
    },
   }
   interface PublicRuntimeConfig {
-   apiUrl: string,
+   baseUrl: string,
   }
 }
 declare module 'vue' {
