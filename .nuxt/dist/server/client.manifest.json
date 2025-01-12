@@ -7,12 +7,12 @@
     "module": true,
     "resourceType": "script"
   },
-  "D:/前端学习/vue-nuxt-demo/node_modules/nuxt/dist/app/entry.js": {
+  "D:/front-end-learn/vue-nuxt-demo/node_modules/nuxt/dist/app/entry.js": {
     "resourceType": "script",
     "module": true,
     "prefetch": true,
     "preload": true,
     "isEntry": true,
-    "file": "D:/前端学习/vue-nuxt-demo/node_modules/nuxt/dist/app/entry.js"
+    "file": "D:/front-end-learn/vue-nuxt-demo/node_modules/nuxt/dist/app/entry.js"
   }
 }

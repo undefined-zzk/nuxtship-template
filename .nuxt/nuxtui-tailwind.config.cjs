@@ -1,6 +1,6 @@
 
       const { defaultExtractor: createDefaultExtractor } = require('tailwindcss/lib/lib/defaultExtractor.js')
-      const { customSafelistExtractor, generateSafelist } = require("D:/前端学习/vue-nuxt-demo/node_modules/@nuxt/ui/dist/runtime/utils/colors")
+      const { customSafelistExtractor, generateSafelist } = require("D:/front-end-learn/vue-nuxt-demo/node_modules/@nuxt/ui/dist/runtime/utils/colors")
 
       const defaultExtractor = createDefaultExtractor({ tailwindConfig: { separator: ':' } })
 
@@ -14,8 +14,8 @@
         ],
         content: {
           files: [
-            "D:/前端学习/vue-nuxt-demo/node_modules/@nuxt/ui/dist/runtime/components/**/*.{vue,mjs,ts}",
-            "D:/前端学习/vue-nuxt-demo/node_modules/@nuxt/ui/dist/runtime/ui.config/**/*.{mjs,js,ts}"
+            "D:/front-end-learn/vue-nuxt-demo/node_modules/@nuxt/ui/dist/runtime/components/**/*.{vue,mjs,ts}",
+            "D:/front-end-learn/vue-nuxt-demo/node_modules/@nuxt/ui/dist/runtime/ui.config/**/*.{mjs,js,ts}"
           ],
           transform: {
             vue: (content) => {
