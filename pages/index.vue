@@ -1,21 +1,32 @@
 <script lang="ts" setup>
 const toast = useToast()
-import { object, string, type InferType } from 'yup'
 import type { FormSubmitEvent } from '#ui/types'
-
+import { nanoid } from 'nanoid'
 const loading = ref(false)
-const schema = object({
-  email: string().min(1, '内容不能为空').required('Required')
-})
-const {data:todos}=useFetch('/api/test')
-type Schema = InferType<typeof schema>
+
+const { data: todos } = useFetch('/api/test')
 
 const todoObj = reactive({
-  text: undefined,
+  text: '',
 })
 
-async function onSubmit(event: FormSubmitEvent<Schema>) {
-  console.log(event.data)
+function onSubmit(event: FormSubmitEvent<{ text: string }>) {
+  loading.value = true
+  const obj = {
+    text: event.data.text,
+    id: nanoid(),
+    disabled: false,
+    selected: false
+  }
+  setTimeout(() => {
+    todos.value?.unshift(obj)
+    loading.value = false
+    todoObj.text = ''
+  }, Math.ceil(Math.random() * 1000))
+}
+
+const delTodo = (id: string) => {
+  todos.value = todos.value?.filter(item => item.id !== id) || []
 }
 onMounted(() => {
   toast.add({
@@ -26,7 +37,7 @@ onMounted(() => {
 </script>
 <template>
   <div>
-    <UForm :schema="schema" :state="todoObj" class="flex gap-1 mt-6" @submit="onSubmit">
+    <UForm :state="todoObj" class="flex gap-1 mt-6" @submit="onSubmit">
       <UInput size="xl" required class="flex-1" v-model="todoObj.text" />
       <UButton type="submit" size="xl" icon="i-heroicons-plus-20-solid" :loading="loading"></UButton>
     </UForm>
@@ -35,7 +46,9 @@ onMounted(() => {
         <span class="pr-4 break-all">{{ item.text }}</span>
         <div class="flex items-center gap-1">
           <UToggle v-model="item.selected" :disabled="item.disabled" />
-          <UButton :disabled="item.disabled" color="red" variant="soft" size="xl" icon="i-heroicons-x-mark-20-solid"></UButton>
+          <UButton @click="delTodo(item.id)" :disabled="item.disabled" color="red" variant="solid" size="xl"
+            icon="i-heroicons-x-mark-20-solid">
+          </UButton>
         </div>
       </li>
     </ul>

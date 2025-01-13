@@ -4068,7 +4068,7 @@ nanoid@^3.3.7:
 
 nanoid@^5.0.9:
   version "5.0.9"
-  resolved "https://registry.npmmirror.com/nanoid/-/nanoid-5.0.9.tgz"
+  resolved "https://registry.npmmirror.com/nanoid/-/nanoid-5.0.9.tgz#977dcbaac055430ce7b1e19cf0130cea91a20e50"
   integrity sha512-Aooyr6MXU6HpvvWXKoVoXwKMs/KyVakWwg7xQfv5/S/RIgJMy0Ifa45H9qqYy7pTCszrHzP21Uk4PZq2HpEM8Q==
 
 nanotar@^0.1.1:

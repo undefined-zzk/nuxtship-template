@@ -1461,7 +1461,7 @@ const errorDev = /*#__PURE__*/Object.freeze({
   template: template$1
 });
 
-const todos = [{ text: "\u6D4B\u8BD5", id: "1", selected: false, disabled: true }];
+const todos = [{ text: "\u6D4B\u8BD5\u4E0D\u53EF\u4EE5\u5220\u9664", id: "1", selected: false, disabled: true }];
 const test_get = defineEventHandler((event) => {
   return todos;
 });
