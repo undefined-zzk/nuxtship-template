@@ -92,6 +92,9 @@
       "#shared": [
         "../shared"
       ],
+      "#shared/*": [
+        "../shared/*"
+      ],
       "assets": [
         "../assets"
       ],
@@ -112,6 +115,12 @@
       ],
       "#internal/nuxt/paths": [
         "../node_modules/nuxt/dist/core/runtime/nitro/paths"
+      ],
+      "#ui-pro": [
+        "../node_modules/@nuxt/ui-pro"
+      ],
+      "#ui-pro/*": [
+        "../node_modules/@nuxt/ui-pro/*"
       ],
       "#ui": [
         "../node_modules/@nuxt/ui/dist/runtime"
@@ -146,7 +155,7 @@
   },
   "include": [
     "./types/nitro-nuxt.d.ts",
-    "../node_modules/@nuxtjs/fontaine/runtime/server",
+    "../node_modules/@nuxt/ui-pro/modules/pro/runtime/server",
     "../node_modules/@nuxt/icon/runtime/server",
     "../node_modules/@nuxtjs/color-mode/runtime/server",
     "../node_modules/@nuxtjs/tailwindcss/runtime/server",
@@ -160,7 +169,7 @@
   "exclude": [
     "../node_modules",
     "../node_modules/nuxt/node_modules",
-    "../node_modules/@nuxtjs/fontaine/node_modules",
+    "../node_modules/@nuxt/ui-pro/node_modules",
     "../node_modules/@nuxt/icon/node_modules",
     "../node_modules/@nuxtjs/color-mode/node_modules",
     "../node_modules/@nuxtjs/tailwindcss/node_modules",

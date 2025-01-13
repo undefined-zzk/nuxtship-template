@@ -1,9 +1,10 @@
+interface ToDoItem {
+  text: string,
+  id: string,
+  selected:boolean,
+  disabled?:boolean
+}
+const todos:ToDoItem[]=[{text:'测试',id:'1',selected:false,disabled:true}]
 export default defineEventHandler((event) => {
-  return {
-    list: [
-      { name: '李四', age: 18 },
-      { name: '张三', age: 19 },
-    ],
-    nums: [{ a: 1, b: 2 }],
-  }
+  return todos
 })

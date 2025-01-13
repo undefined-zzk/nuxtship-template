@@ -4,8 +4,9 @@
 import type { Defu } from 'defu'
 
 import type { default as appConfig0 } from "../../app.config";
+import type { default as appConfig1 } from "../../node_modules/@nuxt/ui-pro/app.config";
 
-type UserAppConfig = Defu<{}, [typeof appConfig0]>
+type UserAppConfig = Defu<{}, [typeof appConfig0, typeof appConfig1]>
 
 declare module "nitropack/types" {
   interface AppConfig extends UserAppConfig {}

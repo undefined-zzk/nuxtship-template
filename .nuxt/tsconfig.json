@@ -74,6 +74,9 @@
       "#shared": [
         "../shared"
       ],
+      "#shared/*": [
+        "../shared/*"
+      ],
       "assets": [
         "../assets"
       ],
@@ -91,6 +94,12 @@
       ],
       "#build/*": [
         "./*"
+      ],
+      "#ui-pro": [
+        "../node_modules/@nuxt/ui-pro"
+      ],
+      "#ui-pro/*": [
+        "../node_modules/@nuxt/ui-pro/*"
       ],
       "#app": [
         "../node_modules/nuxt/dist/app"
@@ -126,7 +135,7 @@
         "./tailwind.config/*"
       ],
       "#app-manifest": [
-        "./manifest/meta/dev"
+        "./manifest/meta/dev.json"
       ],
       "#components": [
         "./components"
@@ -164,8 +173,9 @@
     "./nuxt.d.ts",
     "../.config/nuxt.*",
     "../**/*",
-    "../node_modules/@nuxtjs/fontaine/runtime",
-    "../node_modules/@nuxtjs/fontaine/dist/runtime",
+    "../node_modules/@nuxt/ui-pro/**/*",
+    "../node_modules/@nuxt/ui-pro/modules/pro/runtime",
+    "../node_modules/@nuxt/ui-pro/modules/pro/dist/runtime",
     "../node_modules/@nuxt/icon/runtime",
     "../node_modules/@nuxt/icon/dist/runtime",
     "../node_modules/@nuxtjs/color-mode/runtime",
@@ -184,15 +194,15 @@
     "../dist",
     "../node_modules",
     "../node_modules/nuxt/node_modules",
-    "../node_modules/@nuxtjs/fontaine/node_modules",
+    "../node_modules/@nuxt/ui-pro/node_modules",
     "../node_modules/@nuxt/icon/node_modules",
     "../node_modules/@nuxtjs/color-mode/node_modules",
     "../node_modules/@nuxtjs/tailwindcss/node_modules",
     "../node_modules/@nuxt/ui/node_modules",
     "../node_modules/@pinia/nuxt/node_modules",
     "../node_modules/@nuxt/telemetry/node_modules",
-    "../node_modules/@nuxtjs/fontaine/runtime/server",
-    "../node_modules/@nuxtjs/fontaine/dist/runtime/server",
+    "../node_modules/@nuxt/ui-pro/modules/pro/runtime/server",
+    "../node_modules/@nuxt/ui-pro/modules/pro/dist/runtime/server",
     "../node_modules/@nuxt/icon/runtime/server",
     "../node_modules/@nuxt/icon/dist/runtime/server",
     "../node_modules/@nuxtjs/color-mode/runtime/server",

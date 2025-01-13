@@ -1,3 +1,3 @@
 export default defineNuxtRouteMiddleware(() => {
-  console.log('global middleware')
+  // console.log('global middleware')
 })

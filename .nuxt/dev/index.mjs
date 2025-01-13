@@ -3,33 +3,33 @@ import { Server } from 'node:http';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { parentPort, threadId } from 'node:worker_threads';
-import { getRequestHeader, splitCookiesString, setResponseStatus, setResponseHeader, send, getRequestHeaders, defineEventHandler, handleCacheHeaders, createEvent, fetchWithEvent, isEvent, eventHandler, getResponseStatus, setResponseHeaders, setHeaders, sendRedirect, proxyRequest, createError, getQuery as getQuery$1, getRequestURL, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getRouterParam, readBody, getResponseStatusText } from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/h3/dist/index.mjs';
-import { getRequestDependencies, getPreloadLinks, getPrefetchLinks, createRenderer } from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/vue-bundle-renderer/dist/runtime.mjs';
-import { stringify, uneval } from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/devalue/index.js';
-import destr from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/destr/dist/index.mjs';
-import { withQuery, joinURL, withTrailingSlash, parseURL, withoutBase, getQuery, joinRelativeURL } from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/ufo/dist/index.mjs';
-import { renderToString } from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/vue/server-renderer/index.mjs';
-import { propsToString, renderSSRHead } from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/@unhead/ssr/dist/index.mjs';
-import { createServerHead as createServerHead$1, CapoPlugin } from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/unhead/dist/index.mjs';
-import { klona } from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/klona/dist/index.mjs';
-import defu, { defuFn } from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/defu/dist/defu.mjs';
-import { snakeCase } from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/scule/dist/index.mjs';
-import { createHooks } from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/hookable/dist/index.mjs';
-import { createFetch as createFetch$1, Headers as Headers$1 } from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/ofetch/dist/node.mjs';
-import { createCall, createFetch } from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/unenv/runtime/fetch/index.mjs';
+import { getRequestHeader, splitCookiesString, setResponseStatus, setResponseHeader, send, getRequestHeaders, defineEventHandler, handleCacheHeaders, createEvent, fetchWithEvent, isEvent, eventHandler, getResponseStatus, setResponseHeaders, setHeaders, sendRedirect, proxyRequest, createError, getQuery as getQuery$1, getRequestURL, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getRouterParam, readBody, getResponseStatusText } from 'file://E:/project/vue-nuxt-demo/node_modules/h3/dist/index.mjs';
+import { getRequestDependencies, getPreloadLinks, getPrefetchLinks, createRenderer } from 'file://E:/project/vue-nuxt-demo/node_modules/vue-bundle-renderer/dist/runtime.mjs';
+import { stringify, uneval } from 'file://E:/project/vue-nuxt-demo/node_modules/devalue/index.js';
+import destr from 'file://E:/project/vue-nuxt-demo/node_modules/destr/dist/index.mjs';
+import { withQuery, joinURL, withTrailingSlash, parseURL, withoutBase, getQuery, joinRelativeURL } from 'file://E:/project/vue-nuxt-demo/node_modules/ufo/dist/index.mjs';
+import { renderToString } from 'file://E:/project/vue-nuxt-demo/node_modules/vue/server-renderer/index.mjs';
+import { propsToString, renderSSRHead } from 'file://E:/project/vue-nuxt-demo/node_modules/@unhead/ssr/dist/index.mjs';
+import { createServerHead as createServerHead$1, CapoPlugin } from 'file://E:/project/vue-nuxt-demo/node_modules/unhead/dist/index.mjs';
+import { klona } from 'file://E:/project/vue-nuxt-demo/node_modules/klona/dist/index.mjs';
+import defu, { defuFn } from 'file://E:/project/vue-nuxt-demo/node_modules/defu/dist/defu.mjs';
+import { snakeCase } from 'file://E:/project/vue-nuxt-demo/node_modules/scule/dist/index.mjs';
+import { createHooks } from 'file://E:/project/vue-nuxt-demo/node_modules/hookable/dist/index.mjs';
+import { createFetch as createFetch$1, Headers as Headers$1 } from 'file://E:/project/vue-nuxt-demo/node_modules/ofetch/dist/node.mjs';
+import { createCall, createFetch } from 'file://E:/project/vue-nuxt-demo/node_modules/unenv/runtime/fetch/index.mjs';
 import { AsyncLocalStorage } from 'node:async_hooks';
-import { consola } from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/consola/dist/index.mjs';
-import { getContext } from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/unctx/dist/index.mjs';
-import { captureRawStackTrace, parseRawStackTrace } from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/errx/dist/index.js';
-import { isVNode, version, unref } from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/vue/index.mjs';
-import { basename } from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/pathe/dist/index.mjs';
-import { getIcons } from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/@iconify/utils/lib/index.mjs';
-import { hash } from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/ohash/dist/index.mjs';
-import { createStorage, prefixStorage } from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/unstorage/dist/index.mjs';
-import unstorage_47drivers_47fs from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/unstorage/drivers/fs.mjs';
-import { collections } from 'file://D:/front-end-learn/vue-nuxt-demo/.nuxt/nuxt-icon-server-bundle.mjs';
-import { toRouteMatcher, createRouter } from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/radix3/dist/index.mjs';
-import { defineHeadPlugin } from 'file://D:/front-end-learn/vue-nuxt-demo/node_modules/@unhead/shared/dist/index.mjs';
+import { consola } from 'file://E:/project/vue-nuxt-demo/node_modules/consola/dist/index.mjs';
+import { getContext } from 'file://E:/project/vue-nuxt-demo/node_modules/unctx/dist/index.mjs';
+import { captureRawStackTrace, parseRawStackTrace } from 'file://E:/project/vue-nuxt-demo/node_modules/errx/dist/index.js';
+import { isVNode, version, unref } from 'file://E:/project/vue-nuxt-demo/node_modules/vue/index.mjs';
+import { basename } from 'file://E:/project/vue-nuxt-demo/node_modules/pathe/dist/index.mjs';
+import { getIcons } from 'file://E:/project/vue-nuxt-demo/node_modules/@iconify/utils/lib/index.mjs';
+import { hash } from 'file://E:/project/vue-nuxt-demo/node_modules/ohash/dist/index.mjs';
+import { createStorage, prefixStorage } from 'file://E:/project/vue-nuxt-demo/node_modules/unstorage/dist/index.mjs';
+import unstorage_47drivers_47fs from 'file://E:/project/vue-nuxt-demo/node_modules/unstorage/drivers/fs.mjs';
+import { collections } from 'file://E:/project/vue-nuxt-demo/.nuxt/nuxt-icon-server-bundle.mjs';
+import { toRouteMatcher, createRouter } from 'file://E:/project/vue-nuxt-demo/node_modules/radix3/dist/index.mjs';
+import { defineHeadPlugin } from 'file://E:/project/vue-nuxt-demo/node_modules/@unhead/shared/dist/index.mjs';
 
 function hasReqHeader(event, name, includes) {
   const value = getRequestHeader(event, name);
@@ -164,7 +164,7 @@ const errorHandler = (async function errorhandler(error, event) {
   return send(event, html);
 });
 
-const rootDir = "D:/front-end-learn/vue-nuxt-demo";
+const rootDir = "E:/project/vue-nuxt-demo";
 
 const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"}],"link":[],"style":[],"script":[],"noscript":[]};
 
@@ -183,7 +183,7 @@ const devReducers = {
   URL: (data) => data instanceof URL ? data.toString() : undefined
 };
 const asyncContext = getContext("nuxt-dev", { asyncContext: true, AsyncLocalStorage });
-const _KaYSzicDXZ = (nitroApp) => {
+const _8VZ1JStHQv = (nitroApp) => {
   const handler = nitroApp.h3App.handler;
   nitroApp.h3App.handler = (event) => {
     return asyncContext.callAsync({ logs: [], event }, () => handler(event));
@@ -254,7 +254,7 @@ function onConsoleLog(callback) {
 
 const script = "\"use strict\";(()=>{const t=window,e=document.documentElement,c=[\"dark\",\"light\"],n=getStorageValue(\"localStorage\",\"nuxt-color-mode\")||\"light\";let i=n===\"system\"?u():n;const r=e.getAttribute(\"data-color-mode-forced\");r&&(i=r),l(i),t[\"__NUXT_COLOR_MODE__\"]={preference:n,value:i,getColorScheme:u,addColorScheme:l,removeColorScheme:d};function l(o){const s=\"\"+o+\"\",a=\"\";e.classList?e.classList.add(s):e.className+=\" \"+s,a&&e.setAttribute(\"data-\"+a,o)}function d(o){const s=\"\"+o+\"\",a=\"\";e.classList?e.classList.remove(s):e.className=e.className.replace(new RegExp(s,\"g\"),\"\"),a&&e.removeAttribute(\"data-\"+a)}function f(o){return t.matchMedia(\"(prefers-color-scheme\"+o+\")\")}function u(){if(t.matchMedia&&f(\"\").media!==\"not all\"){for(const o of c)if(f(\":\"+o).matches)return o}return\"light\"}})();function getStorageValue(t,e){switch(t){case\"localStorage\":return window.localStorage.getItem(e);case\"sessionStorage\":return window.sessionStorage.getItem(e);case\"cookie\":return getCookie(e);default:return null}}function getCookie(t){const c=(\"; \"+window.document.cookie).split(\"; \"+t+\"=\");if(c.length===2)return c.pop()?.split(\";\").shift()}";
 
-const _N3sVvQIJCq = (function(nitro) {
+const _jyzTa0Pfrp = (function(nitro) {
   nitro.hooks.hook("render:html", (htmlContext) => {
     htmlContext.head.push(`<script>${script}<\/script>`);
   });
@@ -264,26 +264,83 @@ function defineNitroPlugin(def) {
   return def;
 }
 
-const _lpE4ABaUSh = defineNitroPlugin((nitro) => {
+const _6QeQ1vTK1j = defineNitroPlugin((nitro) => {
   nitro.hooks.hook("close", async () => {
   });
 });
 
 const plugins = [
-  _KaYSzicDXZ,
-_N3sVvQIJCq,
-_lpE4ABaUSh
+  _8VZ1JStHQv,
+_jyzTa0Pfrp,
+_6QeQ1vTK1j
 ];
 
-const _iO5mjo = defineEventHandler((event) => {
+const _3nECrV = defineEventHandler((event) => {
 });
 
 const defineAppConfig = (config) => config;
 
 const appConfig0 = defineAppConfig({
   ui: {
-    primary: "green",
-    gray: "cool"
+    primary: "blue",
+    gray: "neutral",
+    notifications: {
+      position: "right-0 bottom-0"
+    }
+  }
+});
+
+const appConfig1 = defineAppConfig({
+  ui: {
+    variables: {
+      light: {
+        background: "255 255 255",
+        foreground: "var(--color-gray-700)"
+      },
+      dark: {
+        background: "var(--color-gray-900)",
+        foreground: "var(--color-gray-200)"
+      },
+      header: {
+        height: "4rem"
+      }
+    },
+    icons: {
+      dark: "i-heroicons-moon-20-solid",
+      light: "i-heroicons-sun-20-solid",
+      system: "i-heroicons-computer-desktop-20-solid",
+      search: "i-heroicons-magnifying-glass-20-solid",
+      external: "i-heroicons-arrow-up-right-20-solid",
+      chevron: "i-heroicons-chevron-down-20-solid",
+      hash: "i-heroicons-hashtag-20-solid",
+      menu: "i-heroicons-bars-3-20-solid",
+      close: "i-heroicons-x-mark-20-solid",
+      check: "i-heroicons-check-circle-20-solid"
+    },
+    presets: {
+      button: {
+        primary: {
+          color: "white",
+          variant: "solid"
+        },
+        secondary: {
+          color: "gray",
+          variant: "ghost"
+        },
+        input: {
+          color: "white",
+          variant: "outline",
+          ui: {
+            font: "",
+            color: {
+              white: {
+                outline: "ring-1 ring-inset ring-gray-300 dark:ring-gray-700 hover:ring-gray-300 dark:hover:ring-gray-700 hover:bg-gray-100/50 dark:hover:bg-gray-800/50 text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-200 focus-visible:ring-2 focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400"
+              }
+            }
+          }
+        }
+      }
+    }
   }
 });
 
@@ -510,7 +567,7 @@ const inlineAppConfig = {
   }
 };
 
-const appConfig = defuFn(appConfig0, inlineAppConfig);
+const appConfig = defuFn(appConfig0, appConfig1, inlineAppConfig);
 
 function getEnv(key, opts) {
   const envKey = snakeCase(key).toUpperCase();
@@ -578,6 +635,7 @@ const _inlineRuntimeConfig = {
   "public": {
     "baseUrl": ""
   },
+  "apiSecret": "jjfa85093fjKFJ_42)(_",
   "icon": {
     "serverKnownCssClasses": []
   }
@@ -631,7 +689,7 @@ new Proxy(/* @__PURE__ */ Object.create(null), {
   }
 });
 
-const serverAssets = [{"baseName":"server","dir":"D:/front-end-learn/vue-nuxt-demo/server/assets"}];
+const serverAssets = [{"baseName":"server","dir":"E:/project/vue-nuxt-demo/server/assets"}];
 
 const assets = createStorage();
 
@@ -643,11 +701,11 @@ const storage = createStorage({});
 
 storage.mount('/assets', assets);
 
-storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"D:\\front-end-learn\\vue-nuxt-demo","ignore":["**/node_modules/**","**/.git/**"]}));
-storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"D:\\front-end-learn\\vue-nuxt-demo\\server","ignore":["**/node_modules/**","**/.git/**"]}));
-storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"D:\\front-end-learn\\vue-nuxt-demo\\.nuxt","ignore":["**/node_modules/**","**/.git/**"]}));
-storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"D:\\front-end-learn\\vue-nuxt-demo\\.nuxt\\cache","ignore":["**/node_modules/**","**/.git/**"]}));
-storage.mount('data', unstorage_47drivers_47fs({"driver":"fs","base":"D:\\front-end-learn\\vue-nuxt-demo\\.data\\kv","ignore":["**/node_modules/**","**/.git/**"]}));
+storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"E:\\project\\vue-nuxt-demo","ignore":["**/node_modules/**","**/.git/**"]}));
+storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"E:\\project\\vue-nuxt-demo\\server","ignore":["**/node_modules/**","**/.git/**"]}));
+storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"E:\\project\\vue-nuxt-demo\\.nuxt","ignore":["**/node_modules/**","**/.git/**"]}));
+storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"E:\\project\\vue-nuxt-demo\\.nuxt\\cache","ignore":["**/node_modules/**","**/.git/**"]}));
+storage.mount('data', unstorage_47drivers_47fs({"driver":"fs","base":"E:\\project\\vue-nuxt-demo\\.data\\kv","ignore":["**/node_modules/**","**/.git/**"]}));
 
 function useStorage(base = "") {
   return base ? prefixStorage(storage, base) : storage;
@@ -1137,7 +1195,7 @@ function publicAssetsURL(...path) {
 
 const warnOnceSet = /* @__PURE__ */ new Set();
 const DEFAULT_ENDPOINT = "https://api.iconify.design";
-const _UWee0F = defineCachedEventHandler(async (event) => {
+const _YDrDbM = defineCachedEventHandler(async (event) => {
   const url = getRequestURL(event);
   if (!url)
     return createError({ status: 400, message: "Invalid icon request" });
@@ -1195,21 +1253,15 @@ const _UWee0F = defineCachedEventHandler(async (event) => {
   // 1 week
 });
 
-const _lazy_fEF14K = () => Promise.resolve().then(function () { return detail_get$1; });
-const _lazy_USkZEI = () => Promise.resolve().then(function () { return _name_$1; });
-const _lazy_6DUmsP = () => Promise.resolve().then(function () { return submit_post$1; });
-const _lazy_ZuxWYG = () => Promise.resolve().then(function () { return test_get$1; });
-const _lazy_MB9G92 = () => Promise.resolve().then(function () { return renderer$1; });
+const _lazy_MZ7hO3 = () => Promise.resolve().then(function () { return test_get$1; });
+const _lazy_9iUx1J = () => Promise.resolve().then(function () { return renderer$1; });
 
 const handlers = [
-  { route: '', handler: _iO5mjo, lazy: false, middleware: true, method: undefined },
-  { route: '/api/detail', handler: _lazy_fEF14K, lazy: true, middleware: false, method: "get" },
-  { route: '/api/hello/:name', handler: _lazy_USkZEI, lazy: true, middleware: false, method: undefined },
-  { route: '/api/submit', handler: _lazy_6DUmsP, lazy: true, middleware: false, method: "post" },
-  { route: '/api/test', handler: _lazy_ZuxWYG, lazy: true, middleware: false, method: "get" },
-  { route: '/__nuxt_error', handler: _lazy_MB9G92, lazy: true, middleware: false, method: undefined },
-  { route: '/api/_nuxt_icon/:collection', handler: _UWee0F, lazy: false, middleware: false, method: undefined },
-  { route: '/**', handler: _lazy_MB9G92, lazy: true, middleware: false, method: undefined }
+  { route: '', handler: _3nECrV, lazy: false, middleware: true, method: undefined },
+  { route: '/api/test', handler: _lazy_MZ7hO3, lazy: true, middleware: false, method: "get" },
+  { route: '/__nuxt_error', handler: _lazy_9iUx1J, lazy: true, middleware: false, method: undefined },
+  { route: '/api/_nuxt_icon/:collection', handler: _YDrDbM, lazy: false, middleware: false, method: undefined },
+  { route: '/**', handler: _lazy_9iUx1J, lazy: true, middleware: false, method: undefined }
 ];
 
 function createNitroApp() {
@@ -1409,60 +1461,9 @@ const errorDev = /*#__PURE__*/Object.freeze({
   template: template$1
 });
 
-const user = {
-  "1": { name: "\u5F20\u4E09" },
-  "2": { name: "\u674E\u56DB" },
-  "3": { name: "\u738B\u4E94" },
-  "4": { name: "\u8D75\u516D" }
-};
-const detail_get = defineEventHandler(async (event) => {
-  const query = getQuery$1(event);
-  return user[query.id];
-});
-
-const detail_get$1 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  default: detail_get
-});
-
-const _name_ = defineEventHandler((event) => {
-  const name = getRouterParam(event, "name");
-  event.waitUntil(backTask());
-  console.log("name", name);
-  return `hello ,${name}`;
-});
-function backTask() {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      console.log("ffffffffkkkkkkkkkk");
-      resolve(true);
-    }, 2e3);
-  });
-}
-
-const _name_$1 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  default: _name_
-});
-
-const submit_post = defineEventHandler(async (event) => {
-  const body = await readBody(event);
-  return body;
-});
-
-const submit_post$1 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  default: submit_post
-});
-
+const todos = [{ text: "\u6D4B\u8BD5", id: "1", selected: false, disabled: true }];
 const test_get = defineEventHandler((event) => {
-  return {
-    list: [
-      { name: "\u674E\u56DB", age: 18 },
-      { name: "\u5F20\u4E09", age: 19 }
-    ],
-    nums: [{ a: 1, b: 2 }]
-  };
+  return todos;
 });
 
 const test_get$1 = /*#__PURE__*/Object.freeze({
@@ -1535,8 +1536,8 @@ const renderSSRHeadOptions = {"omitLineBreaks":false};
 
 globalThis.__buildAssetsURL = buildAssetsURL;
 globalThis.__publicAssetsURL = publicAssetsURL;
-const getClientManifest = () => import('file://D:/front-end-learn/vue-nuxt-demo/.nuxt/dist/server/client.manifest.mjs').then((r) => r.default || r).then((r) => typeof r === "function" ? r() : r);
-const getServerEntry = () => import('file://D:/front-end-learn/vue-nuxt-demo/.nuxt/dist/server/server.mjs').then((r) => r.default || r);
+const getClientManifest = () => import('file://E:/project/vue-nuxt-demo/.nuxt/dist/server/client.manifest.mjs').then((r) => r.default || r).then((r) => typeof r === "function" ? r() : r);
+const getServerEntry = () => import('file://E:/project/vue-nuxt-demo/.nuxt/dist/server/server.mjs').then((r) => r.default || r);
 const getSSRStyles = lazyCachedFunction(() => Promise.resolve().then(function () { return styles$1; }).then((r) => r.default || r));
 const getSSRRenderer = lazyCachedFunction(async () => {
   const manifest = await getClientManifest();

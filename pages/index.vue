@@ -1,89 +1,44 @@
 <script lang="ts" setup>
-import { BaseFooTest } from '#components'
-definePageMeta({
-  middleware: [
-    function () {
-      console.log('index middleware');
-    },
-    'auth',
-    'named-test'
-  ]
+const toast = useToast()
+import { object, string, type InferType } from 'yup'
+import type { FormSubmitEvent } from '#ui/types'
+
+const loading = ref(false)
+const schema = object({
+  email: string().min(1, '内容不能为空').required('Required')
 })
-useHead({
-  title: '首页',
-  meta: [
-    { name: 'description', content: 'My amazing site.' }
-  ],
-  bodyAttrs: {
-    class: 'test'
-  },
-  script: [{ innerHTML: '' }]
+const {data:todos}=useFetch('/api/test')
+type Schema = InferType<typeof schema>
+
+const todoObj = reactive({
+  text: undefined,
 })
-const list = ref<{ name: string; age: number; }[]>([])
 
-const getList = async () => {
-  // 客户端运行
-  const res = await $fetch('/api/test')
-  console.log('res', res.list);
-  list.value = [...list.value, ...res.list]
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  console.log(event.data)
 }
-// 服务端运行
-// const { data, status, refresh, clear } = await useFetch('/api/test', { lazy: true, pick: ['list'], key: "test" })
-// list.value = data.value?.list ?? []
-// console.log('data', data.value);
-
-// const { data, refresh, clear, error, status } = await useAsyncData('test', async () => {
-//   return await Promise.all([
-//     $fetch('/api/test'),
-//     $fetch('/api/test')
-//   ])
-// })
-// console.log(data, refresh, clear, error, status);
-const num = ref(1)
-// const { data, refresh, clear, status } = useFetch(`/api/detail`,
-//   { query: { id: num }, watch: [num], immediate: true })
-const refreshReq = () => {
-  num.value++
-}
-
-const { data, status, clear } = useFetch('/api/hello/kkll')
-
-const { data: info } = useFetch('/api/submit', { method: 'post', body: { name: 'zzk', age: 18 } })
-const pageTo = () => {
-  navigateTo('/login')
-}
-
-const counter = useState('counter', () => Math.round(Math.random() * 1000))
-
-const websiteStore = useWebsiteStore()
-await callOnce(websiteStore.fetch)
-
-const { $hello } = useNuxtApp()
-const config = useRuntimeConfig()
-console.log('cofing', config);
-
+onMounted(() => {
+  toast.add({
+    title: '把要做的事记录下来吧！',
+    description: '轻松帮你记录任务单',
+  })
+})
 </script>
 <template>
   <div>
-    <h1 class="text-2xl">index--{{ status }} __{{ $hello('class=""') }}</h1>
-    <ul>
-      {{ data }} -_-{{ num }} -_-{{ info }}
-      <li v-for="(item, index) in list" :key="index">{{ item.name }}--{{ item.age }}</li>
+    <UForm :schema="schema" :state="todoObj" class="flex gap-1 mt-6" @submit="onSubmit">
+      <UInput size="xl" required class="flex-1" v-model="todoObj.text" />
+      <UButton type="submit" size="xl" icon="i-heroicons-plus-20-solid" :loading="loading"></UButton>
+    </UForm>
+    <ul class="mt-4">
+      <li class="flex items-center justify-between border-y border-t-0 py-2" v-for="item in todos" :key="item.id">
+        <span class="pr-4 break-all">{{ item.text }}</span>
+        <div class="flex items-center gap-1">
+          <UToggle v-model="item.selected" :disabled="item.disabled" />
+          <UButton :disabled="item.disabled" color="red" variant="soft" size="xl" icon="i-heroicons-x-mark-20-solid"></UButton>
+        </div>
+      </li>
     </ul>
-    <hr>
-    counter:{{ counter }}
-    <UButton @click="counter++">counter++</UButton>
-    <UButton @click="counter--">counter--</UButton>
-    <UButton @click="pageTo">login</UButton>
-    <UButton @click="getList">getlist</UButton>
-    <UButton @click="refreshReq">refresh</UButton>
-    <UButton @click="() => clear()">clear</UButton>
-    websiteConfig:{{ websiteStore.websiteConfig }}
-    <hr>
-    <img src="~/assets/img/bg.png" alt="">
-    <component :is="BaseFooTest"></component>
-    <LazyArticleBn :count="num" />
-    <input type="text" placeholder="search" v-focus>
   </div>
 </template>
 
