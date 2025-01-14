@@ -30,7 +30,7 @@ export default defineNuxtConfig({
   pinia: {
     storesDirs: ['./stores/**'],
   },
-  plugins: ['~/plugins/one/one'], // 添加插件扫描层
+  plugins: [], // 添加插件扫描层
   css: ['~/assets/sass/main.scss'],
   postcss: {
     plugins: {
