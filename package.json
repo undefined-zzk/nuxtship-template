@@ -26,6 +26,9 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@egoist/tailwindcss-icons": "^1.8.2",
+    "@iconify-json/tabler": "^1.2.14",
+    "@iconify-json/uil": "^1.2.3",
     "@types/tailwindcss": "^3.1.0",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",

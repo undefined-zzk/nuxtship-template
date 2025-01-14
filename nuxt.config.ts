@@ -2,18 +2,17 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-01-10',
   devtools: { enabled: false },
-  extends:['@nuxt/ui-pro'],
-  hooks:{
-    'pages:extend'(pages){
-    }
+  extends: ['@nuxt/ui-pro'],
+  hooks: {
+    'pages:extend'(pages) {},
   },
-  router:{
-    options:{
-      scrollBehaviorType:'smooth'
-    }
+  router: {
+    options: {
+      scrollBehaviorType: 'smooth',
+    },
   },
   runtimeConfig: {
-    apiSecret:'jjfa85093fjKFJ_42)(_',
+    apiSecret: 'jjfa85093fjKFJ_42)(_',
     public: {
       baseUrl: '',
     },

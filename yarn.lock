@@ -310,6 +310,13 @@
   resolved "https://registry.npmmirror.com/@csstools/selector-specificity/-/selector-specificity-5.0.0.tgz"
   integrity sha512-PCqQV3c4CoVm3kdPhyeZ07VmBRdH2EpMFA/pd9OASpOEC3aXNGoqPDAZ80D0cLpMBxnmk0+yNhGsEx31hq7Gtw==
 
+"@egoist/tailwindcss-icons@^1.8.2":
+  version "1.8.2"
+  resolved "https://registry.npmmirror.com/@egoist/tailwindcss-icons/-/tailwindcss-icons-1.8.2.tgz#cae1a4fbb84593f703dba1ba18847c5f7d20c0eb"
+  integrity sha512-A0+/387Qg+rZgGRNlV9chwyikaPq9HALJYMwVspbqdbeA+TNEwUajM38pyaUqASArhubZUnFOgRALsdWYXn+rg==
+  dependencies:
+    "@iconify/utils" "^2.2.0"
+
 "@esbuild/aix-ppc64@0.21.5":
   version "0.21.5"
   resolved "https://registry.npmmirror.com/@esbuild/aix-ppc64/-/aix-ppc64-0.21.5.tgz#c7184a326533fcdf1b8ee0733e21c713b975575f"
@@ -569,6 +576,20 @@
   dependencies:
     "@iconify/types" "*"
 
+"@iconify-json/tabler@^1.2.14":
+  version "1.2.14"
+  resolved "https://registry.npmmirror.com/@iconify-json/tabler/-/tabler-1.2.14.tgz#9d972475b9af17f27a2fbf18dc796757170cb3d4"
+  integrity sha512-X5Li79KW5KilHIaNVFKMuPr0WOA4B/Y/EqkrrZiEihs3Wcq/eIDMDDqGBkmei/8naYyfpkj0LWH7osr+vJYFEA==
+  dependencies:
+    "@iconify/types" "*"
+
+"@iconify-json/uil@^1.2.3":
+  version "1.2.3"
+  resolved "https://registry.npmmirror.com/@iconify-json/uil/-/uil-1.2.3.tgz#d455746fe32491fa46a884b6d47e4b7a3cc9c76f"
+  integrity sha512-if91+UBhDQc6glPsIaXecGIcXnbQZfEO4Gdv89TV2xQ+V5e9GWbY5rNl2fsKZd8COsRQ5lRQAKimVQVL0CZZVg==
+  dependencies:
+    "@iconify/types" "*"
+
 "@iconify-json/vscode-icons@^1.2.4":
   version "1.2.10"
   resolved "https://registry.npmmirror.com/@iconify-json/vscode-icons/-/vscode-icons-1.2.10.tgz#eb22c1fc9bbf414982c928232133363f111b87ed"
@@ -588,7 +609,7 @@
   resolved "https://registry.npmmirror.com/@iconify/types/-/types-2.0.0.tgz"
   integrity sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==
 
-"@iconify/utils@^2.2.1":
+"@iconify/utils@^2.2.0", "@iconify/utils@^2.2.1":
   version "2.2.1"
   resolved "https://registry.npmmirror.com/@iconify/utils/-/utils-2.2.1.tgz"
   integrity sha512-0/7J7hk4PqXmxo5PDBDxmnecw5PxklZJfNjIVG9FM0mEfVrvfudS22rYWsqVk6gR3UJ/mSYS90X4R3znXnqfNA==

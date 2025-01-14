@@ -13,5 +13,7 @@ function createRemoteCollection(fetchEndpoint) {
 
 export const collections = {
   'heroicons': () => require('@iconify-json/heroicons/icons.json'),
+  'tabler': () => require('@iconify-json/tabler/icons.json'),
+  'uil': () => require('@iconify-json/uil/icons.json'),
   'vscode-icons': () => require('@iconify-json/vscode-icons/icons.json'),
 }
