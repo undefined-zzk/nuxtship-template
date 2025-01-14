@@ -9,7 +9,7 @@ definePageMeta({
         onAfterEnter: (el) => {
         }
     },
-    middleware: ['named-test']
+    middleware: []
 })
 useHead({
     title: '登录'
