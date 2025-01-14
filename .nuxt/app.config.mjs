@@ -232,7 +232,7 @@ if (import.meta.hot) {
   })
 }
 
-import cfg0 from "E:/project/vue-nuxt-demo/app.config.ts"
-import cfg1 from "E:/project/vue-nuxt-demo/node_modules/@nuxt/ui-pro/app.config.ts"
+import cfg0 from "D:/vue-proj/vue-nuxt-demo/app.config.ts"
+import cfg1 from "D:/vue-proj/vue-nuxt-demo/node_modules/@nuxt/ui-pro/app.config.ts"
 
 export default /*@__PURE__*/ defuFn(cfg0, cfg1, inlineConfig)
