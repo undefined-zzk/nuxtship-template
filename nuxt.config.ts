@@ -2,7 +2,6 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-01-10',
   devtools: { enabled: false },
-  extends: ['@nuxt/ui-pro'],
   hooks: {
     'pages:extend'(pages) {},
   },
