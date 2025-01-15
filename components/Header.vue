@@ -9,10 +9,12 @@ const open = ref(false)
 </script>
 
 <template>
-    <div class="lg:h-10 h-auto lg:flex lg:items-center px-2 lg:justify-between my-5">
+    <div class="lg:h-10 h-auto lg:flex lg:items-center px-4 lg:justify-between my-5">
         <div class="flex items-center justify-between">
             <div>
-                <span class="font-bold text-slate-800 ">Nuxt</span><span class=" text-slate-500">ship</span>
+                <nuxt-link to="/">
+                    <span class="font-bold text-slate-800 ">Nuxt</span><span class=" text-slate-500">ship</span>
+                </nuxt-link>
             </div>
             <span class="lg:hidden cursor-pointer" @click="open = !open">
                 <Icon name="uil:multiply" class="text-2xl" v-if="open"></Icon>
