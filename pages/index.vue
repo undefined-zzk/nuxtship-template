@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-
 </script>
 <template>
-  <div>
-    index
+  <div class="h-screen bg-slate-200">
+    fff
   </div>
 </template>
 
