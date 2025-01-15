@@ -590,13 +590,6 @@
   dependencies:
     "@iconify/types" "*"
 
-"@iconify-json/vscode-icons@^1.2.10":
-  version "1.2.10"
-  resolved "https://registry.npmmirror.com/@iconify-json/vscode-icons/-/vscode-icons-1.2.10.tgz#eb22c1fc9bbf414982c928232133363f111b87ed"
-  integrity sha512-qjp/j2RcHEZkesuAT6RP8BfcuHa+oERr7K1twfsulrIHrKZlpxxBeEyFm+3evZSAOgD+sjgU5CuTYS3RfCL+Pg==
-  dependencies:
-    "@iconify/types" "*"
-
 "@iconify/collections@^1.0.496":
   version "1.0.506"
   resolved "https://registry.npmmirror.com/@iconify/collections/-/collections-1.0.506.tgz#9f9c20d5ef1a47af77c72208aa4baa662cc25df3"
@@ -945,24 +938,7 @@
     rc9 "^2.1.2"
     std-env "^3.8.0"
 
-"@nuxt/ui-pro@^1.6.0":
-  version "1.7.0"
-  resolved "https://registry.npmmirror.com/@nuxt/ui-pro/-/ui-pro-1.7.0.tgz#771db78214968581d7ca85a05348d4a542aae8b5"
-  integrity sha512-a7Vqi75wzxgyx5CI5vKyUEv3pewZUBWuO8Pw1J6U9teyeJ+apKHYfZvRWi0qvoUPSf19y1bin+puCD4vseeTlg==
-  dependencies:
-    "@iconify-json/vscode-icons" "^1.2.10"
-    "@nuxt/ui" "^2.21.0"
-    "@vueuse/core" "^12.4.0"
-    defu "^6.1.4"
-    git-url-parse "^16.0.0"
-    ofetch "^1.4.1"
-    parse-git-config "^3.0.0"
-    pathe "^2.0.1"
-    pkg-types "^1.3.0"
-    tailwind-merge "^2.6.0"
-    vue3-smooth-dnd "^0.0.6"
-
-"@nuxt/ui@^2.20.0", "@nuxt/ui@^2.21.0":
+"@nuxt/ui@^2.20.0":
   version "2.21.0"
   resolved "https://registry.npmmirror.com/@nuxt/ui/-/ui-2.21.0.tgz#da2a419a2b045fc12f4fab56b87cfd3f01a3e2c5"
   integrity sha512-kvQkB1/TyyUMvfQJTwQ2gubCyHCwyvwIQWWygEASXc8FfnzMtJZ+1ZYqNeWd9i7sr4+Lq2ye0+5t8M+raweYUw==
@@ -5281,11 +5257,6 @@ smob@^1.0.0:
   resolved "https://registry.npmmirror.com/smob/-/smob-1.5.0.tgz#85d79a1403abf128d24d3ebc1cdc5e1a9548d3ab"
   integrity sha512-g6T+p7QO8npa+/hNx9ohv1E5pVCmWrVCUzUXJyLdMmftX6ER0oiWY/w9knEonLpnOp6b6FenKnMfR8gqwWdwig==
 
-smooth-dnd@^0.12.1:
-  version "0.12.1"
-  resolved "https://registry.npmmirror.com/smooth-dnd/-/smooth-dnd-0.12.1.tgz#cdb44c972355659e32770368b29b6a80e0ed96f1"
-  integrity sha512-Dndj/MOG7VP83mvzfGCLGzV2HuK1lWachMtWl/Iuk6zV7noDycIBnflwaPuDzoaapEl3Pc4+ybJArkkx9sxPZg==
-
 "source-map-js@>=0.6.2 <2.0.0", source-map-js@^1.0.1, source-map-js@^1.2.0, source-map-js@^1.2.1:
   version "1.2.1"
   resolved "https://registry.npmmirror.com/source-map-js/-/source-map-js-1.2.1.tgz#1ce5650fddd87abc099eda37dcff024c2667ae46"
@@ -6087,13 +6058,6 @@ vue-router@^4.5.0, vue-router@latest:
   integrity sha512-HDuk+PuH5monfNuY+ct49mNmkCRK4xJAV9Ts4z9UFc4rzdDnxQLyCMGGc8pKhZhHTVzfanpNwB/lwqevcBwI4w==
   dependencies:
     "@vue/devtools-api" "^6.6.4"
-
-vue3-smooth-dnd@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.npmmirror.com/vue3-smooth-dnd/-/vue3-smooth-dnd-0.0.6.tgz#7a41f8625345aa0a6cc167d3cbf8c29baf276b4d"
-  integrity sha512-CH9ZZhEfE7qU1ef2rlfgBG+nZtQX8PnWlspB2HDDz1uVGU7fXM0Pr65DftBMz4X81S+edw2H+ZFG6Dyb5J81KA==
-  dependencies:
-    smooth-dnd "^0.12.1"
 
 vue@^3.5.13, vue@latest:
   version "3.5.13"
