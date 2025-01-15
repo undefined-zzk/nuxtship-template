@@ -20,7 +20,7 @@ export default defineNuxtConfig({
   imports: {
     dirs: ['composables/**'],
   },
-  modules: ['@nuxt/ui', '@pinia/nuxt', '@nuxtjs/i18n'],
+  modules: ['@nuxt/ui', '@pinia/nuxt'],
   pinia: {
     storesDirs: ['./stores/**'],
   },
