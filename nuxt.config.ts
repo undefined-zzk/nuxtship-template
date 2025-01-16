@@ -1,41 +1,44 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2025-01-10',
+  compatibilityDate: "2025-01-10",
   devtools: { enabled: false },
-  hooks: {
-    'pages:extend'(pages) {},
-  },
   router: {
     options: {
-      scrollBehaviorType: 'smooth',
+      scrollBehaviorType: "smooth",
     },
   },
   runtimeConfig: {
-    apiSecret: 'jjfa85093fjKFJ_42)(_',
+    apiSecret: "jjfa85093fjKFJ_42)(_",
     public: {
-      baseUrl: '',
+      baseUrl: "",
     },
   },
   imports: {
-    dirs: ['composables/**'],
+    dirs: ["composables/**"],
   },
-  modules: ['@nuxt/ui', '@pinia/nuxt'],
-  pinia: {
-    storesDirs: ['./stores/**'],
+  modules: ['@nuxt/ui', [
+    '@pinia/nuxt',
+    {
+      autoImports: [
+        'defineStore',
+      ],
+    },
+  ], "@nuxtjs/i18n"],
+  i18n: {
+    vueI18n: "./lang/i18n.config.ts",
+    locales: ["en", "zh"],
+    defaultLocale: "en",
   },
   plugins: [], // 添加插件扫描层
-  css: ['~/assets/sass/main.scss'],
+  css: ["~/assets/sass/main.scss"],
   postcss: {
     plugins: {
       tailwindcss: {},
       autoprefixer: {},
     },
   },
-  colorMode: {
-    preference: 'light',
-  },
   app: {
-    pageTransition: { name: 'page', mode: 'out-in' },
+    pageTransition: { name: "page", mode: "out-in" },
   },
   nitro: {
     prerender: {
@@ -52,4 +55,4 @@ export default defineNuxtConfig({
       },
     },
   },
-})
+});
