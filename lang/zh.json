@@ -18,6 +18,10 @@
         "btotitle": "建立更快的网站。",
         "btodesc": "静态或动态，使用 Nuxt 的混合渲染模式，您可以自行选择。"
     },
+    "top": {
+        "title": "{title}",
+        "subtitle": "{subtitle}"
+    },
     "btn": {
         "start": "立即开始",
         "viewrepo": "查看回购",

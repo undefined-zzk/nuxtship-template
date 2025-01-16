@@ -36,7 +36,7 @@ const team = [
 
 <template>
   <div class="pt-10">
-    <top title="About" desc="We are a small passionate team."></top>
+    <top zhtitle="关于" title="About" zhdesc="我们是一个充满激情的小团队。" desc="We are a small passionate team."></top>
     <div>
       <div class="font-bold text-3xl mb-5">Empowering the world with Nuxt.</div>
       <div class="text-xl text-gray-400">

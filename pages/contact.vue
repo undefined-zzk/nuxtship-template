@@ -4,7 +4,7 @@
 
 <template>
     <div class="pt-10">
-        <top title="Contact" desc="I am here to help."></top>
+        <top zhtitle="接触" title="Contact" zhdesc="我来帮忙。" desc="I am here to help."></top>
         <div class="md:flex gap-10 md:px-32">
             <div class="flex-1 md:mb-0 mb-5">
                 <div class="text-2xl">Contact Nuxtship Creator</div>

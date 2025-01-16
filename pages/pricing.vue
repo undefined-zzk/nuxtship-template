@@ -61,7 +61,8 @@ const pricing = [
 
 <template>
     <div class="pt-10">
-        <top title="Pricing" desc="Simple & Predictable pricing. No Surprises."></top>
+        <top title="Pricing" zhtitle="价格"
+        zhdesc="定价简单且可预测。没有意外。" desc="Simple & Predictable pricing. No Surprises."></top>
         <div class="md:flex gap-10 justify-center flex-wrap">
             <div class="border-2 md:m-0 m-auto md:mb-0 mb-10 w-80 border-[#D8DEE9] border-opacity-50 rounded-md p-5"
                 :key="idx" v-for="(item, idx) in pricing">

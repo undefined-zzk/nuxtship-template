@@ -18,6 +18,10 @@
         "btotitle": "Build faster websites.",
         "btodesc": "Static or Dynamic, the choice is yours with Nuxt's hybrid rendering modes."
     },
+    "top": {
+        "title": "{title}",
+        "subtitle": "{subtitle}"
+    },
     "btn": {
         "start": "Get Started",
         "viewrepo": "View Repo",
