@@ -1,0 +1,59 @@
+{
+    "header": {
+        "frame": "Nuxt",
+        "projectName": "ship",
+        "Features": "Features",
+        "Pricing": "Pricing",
+        "About": "About",
+        "Contact": "Contact"
+    },
+    "home": {
+        "webtype": "Marketing website done with Nuxt",
+        "webdesc": "Nuxtship is a starter template for startups, marketing websites & landing pages. Built with Nuxt & TailwindCSS. You can quickly create any website with this starter.",
+        "webfn": "Everything you need to start a website",
+        "webfndesc": "Nuxt comes batteries included. It takes the best parts of state-of-the-art tools and adds its own innovations.",
+        "webitemtitle": "{title}",
+        "webitemdesc": "{desc}",
+        "webitemsub": "Works with technologies",
+        "btotitle": "Build faster websites.",
+        "btodesc": "Static or Dynamic, the choice is yours with Nuxt's hybrid rendering modes."
+    },
+    "top": {
+        "title": "{title}",
+        "subtitle": "{subtitle}"
+    },
+    "price": {
+        "itemname": "{name}",
+        "itemprice": "{price}",
+        "feature": "{feature}"
+    },
+    "about": {
+        "title": "Empowering the world with Nuxt.",
+        "subtitle": "We're a multi-cultural team from around the world! We come from diverse backgrounds, bringing different personalities, experiences and skills to the job. This is what makes our team so special.",
+        "teamname": "{name}",
+        "teamtitle": "{title}"
+    },
+    "contact": {
+        "creator": "Contact Nuxtship Creator",
+        "tip": "Have something to say? I am here to help. Fill up the form or send email.",
+        "one": "1010 Vienna, Austria",
+        "emial": "jakobaichmayr{'@'}gmail.com",
+        "form": {
+            "fullname": "Full Name",
+            "email": "Email Address",
+            "message": "Your Message"
+        }
+    },
+    "btn": {
+        "start": "Get Started",
+        "viewrepo": "View Repo",
+        "login": "log in",
+        "signup": "sign up",
+        "contactus": "Contact us",
+        "sendmessage": "Send Message"
+    },
+    "footer": {
+        "btotitle": "{copy}",
+        "btosub": "Made by Gr33nW33n with attribution to Web3Templates"
+    }
+}
