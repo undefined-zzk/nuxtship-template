@@ -31,7 +31,7 @@ useHead({
                     <textarea class="w-full h-36 border-2 border-[#D1D5DB] rounded p-3 mb-3" name="" id=""
                         :placeholder="$t('contact.form.message')"></textarea>
                     <button type="submit"
-                        class="text-white rounded-md w-full text-center py-3 bg-black hover:bg-slate-700 cursor-pointer">{{ $t('btn.sendmessage') }}</button>
+                        class="text-white dark:border-white dark:border-2 rounded-md w-full text-center py-3 bg-black hover:bg-slate-700 cursor-pointer">{{ $t('btn.sendmessage') }}</button>
                 </form>
             </div>
         </div>

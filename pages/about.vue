@@ -58,7 +58,7 @@ const { locale } = useI18n()
         </div>
         <div class="text-center text-xl">{{ $t('about.teamname', { name: locale === 'en' ? item.name : item.zhname }) }}
         </div>
-        <div class="text-center text-gray-400">{{ $t('about.teamname', {
+        <div class="text-center text-gray-400">{{ $t('about.teamtitle', {
           title: locale === 'en' ? item.title :
             item.zhtitle}) }}</div>
       </div>

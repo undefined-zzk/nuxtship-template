@@ -59,7 +59,7 @@ const icons = computed(() => {
 })
 </script>
 <template>
-  <div class="min-h-screen">
+  <div class="min-h-screen bg-color">
     <div class="lg:flex block lg:gap-x-10">
       <div class="flex-1 lg:pt-24 pt-10">
         <div class="font-bold text-5xl lg:text-6xl xl:text-7xl lg:-tracking-tight">{{ $t('home.webtype') }}
@@ -69,9 +69,9 @@ const icons = computed(() => {
         </div>
         <div class="md:flex block items-center gap-3">
           <div
-            class="lg:w-32 md:mb-0 mb-3 rounded-md md:w-1/2 text-center py-3 border-2 border-gray-950 text-white bg-black hover:bg-gray-800 w-full cursor-pointer">
+            class="lg:w-32 md:mb-0 mb-3 rounded-md md:w-1/2 text-center py-3 border-2 border-gray-950 bg-text-color hover:bg-slate-700 hover:text-white bg-btn w-full cursor-pointer">
             {{ $t('btn.start') }}</div>
-          <div class="lg:w-32 rounded-md md:w-1/2 w-full text-center py-3 border-gray-950 border-2 cursor-pointer">{{ $t('btn.viewrepo') }}</div>
+          <div class="lg:w-32 rounded-md md:w-1/2 w-full text-center py-3 border-gray-950 dark:border-white border-2 cursor-pointer">{{ $t('btn.viewrepo') }}</div>
         </div>
       </div>
       <div class="md:flex-1 hidden md:flex items-center justify-center">
@@ -96,7 +96,7 @@ const icons = computed(() => {
           </div>
         </div>
         <div>
-          <div class="mb-3 text-xl text-black -tracking-tight font-bold">{{ $t('home.webitemtitle',{title:locale==='en'? item.title:item.titlezh}) }}</div>
+          <div class="mb-3 text-xl text-black dark:text-white -tracking-tight font-bold">{{ $t('home.webitemtitle',{title:locale==='en'? item.title:item.titlezh}) }}</div>
           <div class="text-gray-400">{{ $t('home.webitemdesc',{desc:locale==='en'? item.description:item.desczh}) }}</div>
         </div>
       </div>
