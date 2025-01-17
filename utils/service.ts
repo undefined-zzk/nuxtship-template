@@ -14,6 +14,9 @@ class HttpRequest {
       const reqOptions: UseFetchOptions<any> = {
         baseURL: BASE_URL,
         method,
+        headers: {
+          authorization: "afhuosifhsoiufh",
+        },
         ...options,
       };
       try {
