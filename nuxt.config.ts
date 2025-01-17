@@ -44,7 +44,7 @@ export default defineNuxtConfig({
   app: {
     pageTransition: { name: "page", mode: "out-in" },
     head: {
-      title: "Nuxtship",
+      title: "Nuxtship营销网站,入门模板",
       meta: [
         {
           name: "viewport",
@@ -53,13 +53,16 @@ export default defineNuxtConfig({
         },
         {
           name: "keywords",
-          content: "Nuxt,Nuxt3,Nuxtship,NuxtShip,nuxtship,营销网站,入门模板,TailwindCSS",
+          content: "Nuxtship营销网站,入门模板",
         },
         {
           name: "description",
           content:
             "使用 Nuxt 完成的营销网站,Nuxtship 是适用于初创公司、营销网站和登录页面的入门模板。使用 Nuxt 和 TailwindCSS 构建。您可以使用此入门模板快速创建任何网站。",
         },
+      ],
+      link:[
+        {rel:'icon',type:'image/vnd.microsoft.icon',href:'/favicon.ico'}
       ]
     },
   },
