@@ -22,9 +22,10 @@ const changeLang=()=>{
                     <span class="font-bold text-slate-800 ">{{ $t('header.frame') }}</span><span class=" text-slate-500">{{ $t('header.projectName') }}</span>
                 </nuxt-link>
             </div>
-            <span class="lg:hidden cursor-pointer" @click="open = !open">
-                <Icon name="uil:multiply" class="text-2xl" v-if="open"></Icon>
-                <Icon name="uil:align-justify" class="text-2xl" v-else></Icon>
+            <span class="lg:hidden flex items-center gap-x-1 cursor-pointer">
+                <div class="cursor-pointer" @click="changeLang">{{ locale=='en'?'中文':'English' }}</div>
+                <Icon name="uil:multiply" class="text-2xl" v-if="open" @click="open = !open"></Icon>
+                <Icon name="uil:align-justify" class="text-2xl" v-else @click="open = !open"></Icon>
             </span>
         </div>
         <div class="lg:flex lg:items-center hidden lg:gap-6 flex-col lg:flex-row">
