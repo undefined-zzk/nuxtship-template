@@ -22,11 +22,35 @@
         "title": "{title}",
         "subtitle": "{subtitle}"
     },
+    "price": {
+        "itemname": "{name}",
+        "itemprice": "{price}",
+        "feature": "{feature}"
+    },
+    "about": {
+        "title": "Empowering the world with Nuxt.",
+        "subtitle": "We're a multi-cultural team from around the world! We come from diverse backgrounds, bringing different personalities, experiences and skills to the job. This is what makes our team so special.",
+        "teamname": "{name}",
+        "teamtitle": "{title}"
+    },
+    "contact": {
+        "creator": "Contact Nuxtship Creator",
+        "tip": "Have something to say? I am here to help. Fill up the form or send email.",
+        "one": "1010 Vienna, Austria",
+        "emial": "jakobaichmayr{'@'}gmail.com",
+        "form": {
+            "fullname": "Full Name",
+            "email": "Email Address",
+            "message": "Your Message"
+        }
+    },
     "btn": {
         "start": "Get Started",
         "viewrepo": "View Repo",
         "login": "log in",
-        "signup": "sign up"
+        "signup": "sign up",
+        "contactus": "Contact us",
+        "sendmessage": "Send Message"
     },
     "footer": {
         "btotitle": "{copy}",
