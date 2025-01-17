@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const { locale } = useI18n()
+useHead({
+    title:"contact"
+})
 </script>
 
 <template>

@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+useHead({
+    title:"Nuxtship-features"
+})
 const {locale }= useI18n()
 const weblist = ref([
   {

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+useHead({
+    title:"pricing"
+})
 const pricing = [
     {
         name: "Personal",
@@ -92,6 +95,8 @@ const pricing = [
     },
 ];
 const { locale } = useI18n()
+const localePath = useLocalePath()
+
 </script>
 
 <template>
@@ -113,9 +118,10 @@ const { locale } = useI18n()
                     $t('price.itemprice', { price: locale === 'en' ? item.price : item.zhprice }) }}</div>
                 <div class="flex gap-3 items-center mb-4" :key="ix" v-for="(text, ix) in item.features">
                     <Icon name="uil:sign-out-alt" class="text-xl"></Icon>
-                    <span class="break-all text-ellipsis whitespace-nowrap">{{ $t('price.feature',{feature:locale==='en'?text:item.zhfeatures[ix]}) }}</span>
+                    <span class="break-all text-ellipsis whitespace-nowrap">{{
+                        $t('price.feature', { feature: locale === 'en' ? text : item.zhfeatures[ix]}) }}</span>
                 </div>
-                <nuxt-link :to="item.button.link" :class="{ 'bg-gray-900 text-white': item.popular }"
+                <nuxt-link :to="localePath(item.button.link)" :class="{ 'bg-gray-900 text-white': item.popular }"
                     class="block mt-10 rounded-md w-full text-center py-3 border-gray-950 border-2 cursor-pointer">
                     {{ $t(`btn.${item.button.type}`) }}</nuxt-link>
             </div>

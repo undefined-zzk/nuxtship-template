@@ -1,4 +1,7 @@
 <script setup lang="ts">
+useHead({
+    title:"about"
+})
 const TeamImg1 = "https://source.unsplash.com/IF9TK5Uy-KI";
 const TeamImg2 = "https://source.unsplash.com/iEEBWgY_6lA";
 const TeamImg3 = "https://source.unsplash.com/ZHvM3XIOHoE";

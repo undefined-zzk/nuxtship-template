@@ -1,7 +1,5 @@
 <script setup lang="ts">
-// import { useLangStore } from '~/stores/lang'
-const langStore = useLangStore()
-const { cacheLocale } = storeToRefs(langStore)
+const localePath = useLocalePath()
 const menuItems = ref([
     { name: 'Features', path: '/' },
     { name: 'Pricing', path: '/pricing' },
@@ -12,7 +10,6 @@ const open = ref(false)
 const {locale,setLocale }= useI18n()
 const changeLang=()=>{
     const lang=locale.value=='en'? 'zh':'en'
-    // cacheLocale.value=lang
     setLocale(lang)
 }
 </script>
@@ -21,7 +18,7 @@ const changeLang=()=>{
     <div class="lg:h-10 h-auto lg:flex lg:items-center px-4 lg:justify-between my-5">
         <div class="flex items-center justify-between">
             <div>
-                <nuxt-link to="/">
+                <nuxt-link :to="localePath('/')">
                     <span class="font-bold text-slate-800 ">{{ $t('header.frame') }}</span><span class=" text-slate-500">{{ $t('header.projectName') }}</span>
                 </nuxt-link>
             </div>
@@ -31,7 +28,7 @@ const changeLang=()=>{
             </span>
         </div>
         <div class="lg:flex lg:items-center hidden lg:gap-6 flex-col lg:flex-row">
-            <nuxt-link :to="page.path" v-for="(page, index) in menuItems" :key="index">
+            <nuxt-link :to="localePath(page.path)" v-for="(page, index) in menuItems" :key="index">
                 <span class="block h-10 leading-10 text-gray-500 hover:text-gray-900">{{ $t(`header.${page.name}`) }}</span>
             </nuxt-link>
             <div class="lg:hidden flex gap-3">
@@ -41,7 +38,7 @@ const changeLang=()=>{
             </div>
         </div>
         <div class="flex lg:hidden lg:items-center lg:gap-6 flex-col lg:flex-row" v-if="open">
-            <nuxt-link :to="page.path" v-for="(page, index) in menuItems" :key="index">
+            <nuxt-link :to="localePath(page.path)" v-for="(page, index) in menuItems" :key="index">
                 <span class="block h-10 leading-10 text-gray-500 hover:text-gray-900">{{ $t(`header.${page.name}`) }}</span>
             </nuxt-link>
             <div class="lg:hidden flex gap-3">
