@@ -2,6 +2,9 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-01-10',
   devtools: { enabled: false },
+  features: {
+    inlineStyles: false,
+  },
   hooks: {
     'pages:extend'(pages) {},
   },
