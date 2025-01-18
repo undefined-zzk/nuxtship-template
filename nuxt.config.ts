@@ -5,9 +5,6 @@ export default defineNuxtConfig({
   features: {
     inlineStyles: false,
   },
-  hooks: {
-    'pages:extend'(pages) {},
-  },
   router: {
     options: {
       scrollBehaviorType: 'smooth',
@@ -22,11 +19,21 @@ export default defineNuxtConfig({
   imports: {
     dirs: ['composables/**'],
   },
-  modules: ['@nuxt/ui', '@pinia/nuxt'],
-  pinia: {
-    storesDirs: ['./stores/**'],
+  modules: [
+    '@nuxt/ui',
+    [
+      '@pinia/nuxt',
+      {
+        autoImports: ['defineStore'],
+      },
+    ],
+    '@nuxtjs/i18n',
+  ],
+  i18n: {
+    vueI18n: './lang/i18n.config.ts',
+    locales: ['en', 'zh'],
+    defaultLocale: 'en',
   },
-  plugins: [], // 添加插件扫描层
   css: ['~/assets/sass/main.scss'],
   postcss: {
     plugins: {
@@ -34,16 +41,34 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-  colorMode: {
-    preference: 'light',
-  },
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
+    head: {
+      title: 'Nuxtship营销网站,入门模板',
+      meta: [
+        {
+          name: 'viewport',
+          content: 'width=device-width, initial-scale=1',
+          charset: 'utf-8',
+        },
+        {
+          name: 'keywords',
+          content: 'Nuxtship营销网站,入门模板',
+        },
+        {
+          name: 'description',
+          content:
+            '使用 Nuxt 完成的营销网站,Nuxtship 是适用于初创公司、营销网站和登录页面的入门模板。使用 Nuxt 和 TailwindCSS 构建。您可以使用此入门模板快速创建任何网站。',
+        },
+      ],
+      link: [
+        { rel: 'icon', type: 'image/vnd.microsoft.icon', href: '/favicon.ico' },
+      ],
+    },
   },
   nitro: {
     prerender: {
       routes: [],
-      // ignore: ['/login'],
     },
   },
   vite: {

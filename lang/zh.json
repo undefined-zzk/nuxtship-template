@@ -1,0 +1,59 @@
+{
+    "header": {
+        "frame": "Nuxt",
+        "projectName": "ship",
+        "Features": "特征",
+        "Pricing": "价格",
+        "About": "关于",
+        "Contact": "接触"
+    },
+    "home": {
+        "webtype": "使用 Nuxt 完成的营销网站",
+        "webdesc": "Nuxtship 是适用于初创公司、营销网站和登录页面的入门模板。使用 Nuxt 和 TailwindCSS 构建。您可以使用此入门模板快速创建任何网站。",
+        "webfn": "建立网站所需的一切",
+        "webfndesc": "Nuxt 附带电池。它采用了最先进工具的最佳部分并添加了自己的创新。",
+        "webitemtitle": "{title}",
+        "webitemdesc": "{desc}",
+        "webitemsub": "与您的技术配合使用",
+        "btotitle": "建立更快的网站。",
+        "btodesc": "静态或动态，使用 Nuxt 的混合渲染模式，您可以自行选择。"
+    },
+    "top": {
+        "title": "{title}",
+        "subtitle": "{subtitle}"
+    },
+    "price": {
+        "itemname": "{name}",
+        "itemprice": "{price}",
+        "feature": "{feature}"
+    },
+    "about": {
+        "title": "用 Nuxt 赋予世界力量。",
+        "subtitle": "我们是一支来自世界各地的多元文化团队！我们的背景各异，为工作带来不同的个性、经验和技能。这就是我们的团队如此特别的原因。",
+        "teamname": "{name}",
+        "teamtitle": "{title}"
+    },
+    "contact": {
+        "creator": "联系 Nuxtship 创建者",
+        "tip": "有话要说吗？我很乐意为您提供帮助。填写表格或发送电子邮件。",
+        "one": "1010 维也纳, 奥地利",
+        "emial": "jakobaichmayr{'@'}gmail.com",
+        "form": {
+            "fullname": "姓名",
+            "email": "电子邮件",
+            "message": "您的留言"
+        }
+    },
+    "btn": {
+        "start": "立即开始",
+        "viewrepo": "查看回购",
+        "login": "登录",
+        "signup": "报名",
+        "contactus": "联系我们",
+        "sendmessage": "发送消息"
+    },
+    "footer": {
+        "btotitle": "{copy}",
+        "btosub": "由 Gr33nW33n 制作，版权归 Web3Templates 所有"
+    }
+}

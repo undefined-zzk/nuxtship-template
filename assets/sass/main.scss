@@ -1,3 +1,18 @@
+@use '../const/index.scss';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer utilities{
+   .bg-color{
+      background-color: var(--bg-color);
+   }
+   .text-color{
+      color: var(--text-color);
+   }
+   .bg-btn{
+     background-color: var(--bg-btn);
+   }
+   .bg-text-color{
+     color: var(--btn-text-color);
+   }
+}

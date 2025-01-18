@@ -1,2 +1,13 @@
-$primary: #49240F;
-$secondary: #E4A79D;
+html.light {
+  --bg-color: #ffffff;
+  --text-color: #121212;
+  --bg-btn:#000000;
+  --btn-text-color:#ffffff;
+}
+
+html.dark {
+  --bg-color: #121212;
+  --text-color: #ffffff;
+  --bg-btn:#ffffff;
+  --btn-text-color:#000000;
+}

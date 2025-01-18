@@ -11,6 +11,7 @@ export default <Partial<Config>>{
     './app.vue',
     './error.vue',
   ],
+  // darkMode:['selector','[data-mode="dark"]'],
   theme: {
     extend: {
       fontFamily: {
