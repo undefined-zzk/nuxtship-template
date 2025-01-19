@@ -1,19 +1,18 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-01-10',
-  devtools: { enabled: false },
-  extends:['@nuxt/ui-pro'],
-  hooks:{
-    'pages:extend'(pages){
-    }
+  devtools: { enabled: true },
+  extends: ['@nuxt/ui-pro'],
+  hooks: {
+    'pages:extend'(pages) {},
   },
-  router:{
-    options:{
-      scrollBehaviorType:'smooth'
-    }
+  router: {
+    options: {
+      scrollBehaviorType: 'smooth',
+    },
   },
   runtimeConfig: {
-    apiSecret:'jjfa85093fjKFJ_42)(_',
+    apiSecret: 'jjfa85093fjKFJ_42)(_',
     public: {
       baseUrl: '',
     },
@@ -27,7 +26,10 @@ export default defineNuxtConfig({
     ],
     dirs: ['composables/**'],
   },
-  modules: ['@nuxt/ui', '@pinia/nuxt'],
+  modules: ['@nuxt/ui', '@pinia/nuxt', '@nuxthub/core'],
+  hub: {
+    database: true,
+  },
   pinia: {
     storesDirs: ['./stores/**'],
   },
