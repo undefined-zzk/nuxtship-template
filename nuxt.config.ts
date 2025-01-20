@@ -1,40 +1,40 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: "2025-01-10",
+  compatibilityDate: '2025-01-10',
   devtools: { enabled: false },
   features: {
     inlineStyles: false,
   },
   router: {
     options: {
-      scrollBehaviorType: "smooth",
+      scrollBehaviorType: 'smooth',
     },
   },
   runtimeConfig: {
-    apiSecret: "jjfa85093fjKFJ_42)(_",
+    apiSecret: 'jjfa85093fjKFJ_42)(_',
     public: {
-      baseUrl: "",
+      baseUrl: '',
     },
   },
   imports: {
-    dirs: ["composables/**"],
+    dirs: ['composables/**'],
   },
   modules: [
-    "@nuxt/ui",
+    '@nuxt/ui',
     [
-      "@pinia/nuxt",
+      '@pinia/nuxt',
       {
-        autoImports: ["defineStore"],
+        autoImports: ['defineStore'],
       },
     ],
-    "@nuxtjs/i18n",
+    '@nuxtjs/i18n',
   ],
   i18n: {
-    vueI18n: "./lang/i18n.config.ts",
-    locales: ["en", "zh"],
-    defaultLocale: "en",
+    vueI18n: './lang/i18n.config.ts',
+    locales: ['en', 'zh'],
+    defaultLocale: 'en',
   },
-  css: ["~/assets/sass/main.scss"],
+  css: ['~/assets/sass/main.scss'],
   postcss: {
     plugins: {
       tailwindcss: {},
@@ -42,28 +42,28 @@ export default defineNuxtConfig({
     },
   },
   app: {
-    pageTransition: { name: "page", mode: "out-in" },
+    pageTransition: { name: 'page', mode: 'out-in' },
     head: {
-      title: "Nuxtship营销网站,入门模板",
+      title: 'Nuxtship营销网站,入门模板',
       meta: [
         {
-          name: "viewport",
-          content: "width=device-width, initial-scale=1",
-          charset: "utf-8",
+          name: 'viewport',
+          content: 'width=device-width, initial-scale=1',
+          charset: 'utf-8',
         },
         {
-          name: "keywords",
-          content: "Nuxtship营销网站,入门模板",
+          name: 'keywords',
+          content: 'Nuxtship营销网站,入门模板',
         },
         {
-          name: "description",
+          name: 'description',
           content:
-            "使用 Nuxt 完成的营销网站,Nuxtship 是适用于初创公司、营销网站和登录页面的入门模板。使用 Nuxt 和 TailwindCSS 构建。您可以使用此入门模板快速创建任何网站。",
+            '使用 Nuxt 完成的营销网站,Nuxtship 是适用于初创公司、营销网站和登录页面的入门模板。使用 Nuxt 和 TailwindCSS 构建。您可以使用此入门模板快速创建任何网站。',
         },
       ],
-      link:[
-        {rel:'icon',type:'image/vnd.microsoft.icon',href:'/favicon.ico'}
-      ]
+      link: [
+        { rel: 'icon', type: 'image/vnd.microsoft.icon', href: '/favicon.ico' },
+      ],
     },
   },
   nitro: {
@@ -80,4 +80,4 @@ export default defineNuxtConfig({
       },
     },
   },
-});
+})
