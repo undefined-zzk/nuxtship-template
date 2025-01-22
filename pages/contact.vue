@@ -1,6 +1,9 @@
 <script setup lang="ts">
-useHead({
-    title:"contact"
+useSeoMeta({
+  title: 'Nuxtship-contact',
+  ogTitle: 'Nuxtship-contact',
+  description: '联系我们(contact us)',
+  ogDescription: '联系我们(contact us)',
 })
 </script>
 

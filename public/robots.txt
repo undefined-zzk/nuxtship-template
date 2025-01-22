@@ -1,1 +1,4 @@
 
+User-Agent: *
+Disallow: /private/
+Allow: /

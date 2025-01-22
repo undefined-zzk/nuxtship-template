@@ -513,7 +513,7 @@
     "@intlify/core-base" "10.0.5"
     "@intlify/shared" "10.0.5"
 
-"@intlify/h3@^0.6.0":
+"@intlify/h3@^0.6.1":
   version "0.6.1"
   resolved "https://registry.npmmirror.com/@intlify/h3/-/h3-0.6.1.tgz"
   integrity sha512-hFMcqWXCoFNZkraa+JF7wzByGdE0vGi8rUs7CTFrE4hE3X2u9QcelH8VRO8mPgJDH+TgatzvrVp6iZsWVluk2A==
@@ -540,7 +540,7 @@
   resolved "https://registry.npmmirror.com/@intlify/shared/-/shared-10.0.5.tgz"
   integrity sha512-bmsP4L2HqBF6i6uaMqJMcFBONVjKt+siGluRq4Ca4C0q7W2eMaVZr8iCgF9dKbcVXutftkC7D6z2SaSMmLiDyA==
 
-"@intlify/shared@^10.0.3", "@intlify/shared@10.0.5":
+"@intlify/shared@^10.0.5", "@intlify/shared@10.0.5":
   version "10.0.5"
   resolved "https://registry.npmmirror.com/@intlify/shared/-/shared-10.0.5.tgz"
   integrity sha512-bmsP4L2HqBF6i6uaMqJMcFBONVjKt+siGluRq4Ca4C0q7W2eMaVZr8iCgF9dKbcVXutftkC7D6z2SaSMmLiDyA==
@@ -553,7 +553,7 @@
 "@intlify/shared@latest":
   version "11.0.1"
 
-"@intlify/unplugin-vue-i18n@^6.0.1":
+"@intlify/unplugin-vue-i18n@^6.0.3":
   version "6.0.3"
   resolved "https://registry.npmmirror.com/@intlify/unplugin-vue-i18n/-/unplugin-vue-i18n-6.0.3.tgz"
   integrity sha512-9ZDjBlhUHtgjRl23TVcgfJttgu8cNepwVhWvOv3mUMRDAhjW0pur1mWKEUKr1I8PNwE4Gvv2IQ1xcl4RL0nG0g==
@@ -887,7 +887,7 @@
     std-env "^3.8.0"
     tinyglobby "^0.2.10"
 
-"@nuxt/kit@^3.12.1", "@nuxt/kit@^3.13.2", "@nuxt/kit@^3.14.0", "@nuxt/kit@^3.14.1592", "@nuxt/kit@^3.15.0", "@nuxt/kit@^3.15.1", "@nuxt/kit@^3.9.0", "@nuxt/kit@3.15.2":
+"@nuxt/kit@^3.12.1", "@nuxt/kit@^3.13.2", "@nuxt/kit@^3.14.1592", "@nuxt/kit@^3.15.0", "@nuxt/kit@^3.15.1", "@nuxt/kit@^3.15.2", "@nuxt/kit@^3.9.0", "@nuxt/kit@3.15.2":
   version "3.15.2"
   resolved "https://registry.npmmirror.com/@nuxt/kit/-/kit-3.15.2.tgz"
   integrity sha512-nxiPJVz2fICcyBKlN5pL1IgZVejyArulREsS5HvAk07hijlYuZ5toRM8soLt51VQNpFd/PedL+Z1AlYu/bQCYQ==
@@ -1029,17 +1029,17 @@
     pathe "^1.1.2"
     ufo "^1.5.3"
 
-"@nuxtjs/i18n@^9.1.1":
-  version "9.1.1"
-  resolved "https://registry.npmmirror.com/@nuxtjs/i18n/-/i18n-9.1.1.tgz"
-  integrity sha512-S8l5ri1GFo5OUsl9qSgicE9Sm0BZjVHU7p6ml1qhQUTewngnTPTlcytWX5etwJeAjHEu2w9VAV4qXTn9Q5EgmQ==
+"@nuxtjs/i18n@^9.1.2":
+  version "9.1.2"
+  resolved "https://registry.npmmirror.com/@nuxtjs/i18n/-/i18n-9.1.2.tgz"
+  integrity sha512-z6Ay+h0AB5zHKgZ7Gmb9lMri/k6TnnqVW1yLBdeojkWMK+AELw251c29oxK/+mfTqg1uhMql2aY9hWwaAavWMw==
   dependencies:
-    "@intlify/h3" "^0.6.0"
-    "@intlify/shared" "^10.0.3"
-    "@intlify/unplugin-vue-i18n" "^6.0.1"
+    "@intlify/h3" "^0.6.1"
+    "@intlify/shared" "^10.0.5"
+    "@intlify/unplugin-vue-i18n" "^6.0.3"
     "@intlify/utils" "^0.13.0"
     "@miyaneee/rollup-plugin-json5" "^1.2.0"
-    "@nuxt/kit" "^3.14.0"
+    "@nuxt/kit" "^3.15.2"
     "@rollup/plugin-yaml" "^4.1.2"
     "@vue/compiler-sfc" "^3.5.13"
     debug "^4.3.5"
@@ -1055,7 +1055,7 @@
     ufo "^1.3.1"
     unplugin "^1.10.1"
     unplugin-vue-router "^0.10.8"
-    vue-i18n "^10.0.3"
+    vue-i18n "^10.0.5"
     vue-router "^4.5.0"
 
 "@nuxtjs/tailwindcss@^6.13.1":
@@ -6426,7 +6426,7 @@ vue-devtools-stub@^0.1.0:
   resolved "https://registry.npmmirror.com/vue-devtools-stub/-/vue-devtools-stub-0.1.0.tgz"
   integrity sha512-RutnB7X8c5hjq39NceArgXg28WZtZpGc3+J16ljMiYnFhKvd8hITxSWQSQ5bvldxMDU6gG5mkxl1MTQLXckVSQ==
 
-vue-i18n@*, vue-i18n@^10.0.0, vue-i18n@^10.0.3:
+vue-i18n@*, vue-i18n@^10.0.0, vue-i18n@^10.0.5:
   version "10.0.5"
   resolved "https://registry.npmmirror.com/vue-i18n/-/vue-i18n-10.0.5.tgz"
   integrity sha512-9/gmDlCblz3i8ypu/afiIc/SUIfTTE1mr0mZhb9pk70xo2csHAM9mp2gdQ3KD2O0AM3Hz/5ypb+FycTj/lHlPQ==

@@ -1,10 +1,14 @@
 <script setup lang="ts">
-useHead({
-    title:"about"
+import TeamImg1 from "~/assets/img/team1.avif";
+import TeamImg2 from "~/assets/img/team2.avif";
+import TeamImg3 from "~/assets/img/team3.avif";
+
+useSeoMeta({
+  title: 'Nuxtship-about',
+  ogTitle: 'Nuxtship-about',
+  description: '关于我们(about us)',
+  ogDescription: '关于我们(about us)',
 })
-const TeamImg1 = "https://source.unsplash.com/IF9TK5Uy-KI";
-const TeamImg2 = "https://source.unsplash.com/iEEBWgY_6lA";
-const TeamImg3 = "https://source.unsplash.com/ZHvM3XIOHoE";
 
 const team = [
   {
@@ -41,6 +45,7 @@ const team = [
     },
   },
 ];
+
 const { locale } = useI18n()
 </script>
 
@@ -54,7 +59,7 @@ const { locale } = useI18n()
     <div class="md:flex gap-10 mt-10 justify-center">
       <div v-for="(item, idx) in team" :key="idx" class="md:m-0 m-auto md:mb-0 mb-5 flex items-center flex-col">
         <div class="w-[272px] h-[272px] mb-5 hover:shadow-xl rounded-sm overflow-hidden">
-          <img :src="item.avatar.src" alt="" class="w-full h-full object-cover">
+          <img :src="item.avatar.src" alt="team(团队)" class="w-full h-full object-cover">
         </div>
         <div class="text-center text-xl">{{ $t('about.teamname', { name: locale === 'en' ? item.name : item.zhname }) }}
         </div>
