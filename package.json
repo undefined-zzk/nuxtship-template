@@ -13,7 +13,7 @@
     "@nuxt/fonts": "^0.10.3",
     "@nuxt/ui": "^2.21.0",
     "@nuxtjs/fontaine": "^0.4.4",
-    "@nuxtjs/i18n": "^9.1.1",
+    "@nuxtjs/i18n": "^9.1.2",
     "@pinia/nuxt": "^0.9.0",
     "nanoid": "^5.0.9",
     "normalize.css": "^8.0.1",
