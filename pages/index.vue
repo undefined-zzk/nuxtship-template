@@ -23,6 +23,13 @@ const icons = computed(() => {
 </script>
 <template>
   <div class="min-h-screen bg-color">
+
+    <Head>
+      <Title>Nuxtship</Title>
+      <Meta name="description"
+        content="使用 Nuxt 完成的营销网站,Nuxtship 是适用于初创公司、营销网站和登录页面的入门模板。使用 Nuxt 和 TailwindCSS 构建。您可以使用此入门模板快速创建任何网站。">
+      </Meta>
+    </Head>
     <div class="lg:flex block lg:gap-x-10">
       <div class="flex-1 lg:pt-24 pt-10">
         <div class="font-bold text-5xl lg:text-6xl xl:text-7xl lg:-tracking-tight">{{ $t('home.webtype') }}

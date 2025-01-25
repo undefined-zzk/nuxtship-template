@@ -51,6 +51,13 @@ const { locale } = useI18n()
 
 <template>
   <div class="pt-10">
+
+    <Head>
+      <Title>Nuxtship-about</Title>
+      <Meta name="description"
+        content="使用 Nuxt 完成的营销网站,Nuxtship 是适用于初创公司、营销网站和登录页面的入门模板。使用 Nuxt 和 TailwindCSS 构建。您可以使用此入门模板快速创建任何网站。">
+      </Meta>
+    </Head>
     <top zhtitle="关于" title="About" zhdesc="我们是一个充满激情的小团队。" desc="We are a small passionate team."></top>
     <div>
       <div class="font-bold text-3xl mb-5">{{ $t('about.title') }}</div>
@@ -65,7 +72,8 @@ const { locale } = useI18n()
         </div>
         <div class="text-center text-gray-400">{{ $t('about.teamtitle', {
           title: locale === 'en' ? item.title :
-            item.zhtitle}) }}</div>
+            item.zhtitle
+        }) }}</div>
       </div>
     </div>
   </div>
