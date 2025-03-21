@@ -1,4 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import AutoImport from 'unplugin-auto-import/vite'
+import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
+import Components from 'unplugin-vue-components/vite'
 export default defineNuxtConfig({
   compatibilityDate: '2025-01-10',
   devtools: { enabled: false },
@@ -19,18 +22,14 @@ export default defineNuxtConfig({
   imports: {
     dirs: ['composables/**'],
   },
-  modules: [
-    '@nuxt/ui',
-    [
-      '@pinia/nuxt',
-      {
-        autoImports: ['defineStore'],
-      },
-    ],
-    '@nuxtjs/i18n',
-  ],
+  modules: ['@nuxt/ui', [
+    '@pinia/nuxt',
+    {
+      autoImports: ['defineStore'],
+    },
+  ], '@nuxtjs/i18n', 'nuxtjs-naive-ui', '@vueuse/nuxt'],
   i18n: {
-    vueI18n: './lang/i18n.config.ts',
+    vueI18n: '~/locales/i18n.config.ts',
     locales: ['en', 'zh'],
     defaultLocale: 'en',
   },
@@ -79,5 +78,25 @@ export default defineNuxtConfig({
         },
       },
     },
+    optimizeDeps: {
+      include: ['vueuc'], // 显式包含 vueuc
+    },
+    plugins:[
+      AutoImport({
+        imports: [
+          {
+            'naive-ui': [
+              'useDialog',
+              'useMessage',
+              'useNotification',
+              'useLoadingBar'
+            ]
+          }
+        ]
+      }),
+      Components({
+        resolvers: [NaiveUiResolver()],
+      }),
+    ]
   },
 })

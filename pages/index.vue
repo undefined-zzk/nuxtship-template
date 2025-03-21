@@ -18,7 +18,7 @@ const { locale } = useI18n()
 const { data: weblist } = useFetch<Home[]>('/api/home')
 
 const icons = computed(() => {
-  return weblist.value?.map((item) => item.icon)
+  return weblist.value?.map((item: any) => item.icon)
 })
 </script>
 <template>
@@ -47,9 +47,10 @@ const icons = computed(() => {
         </div>
       </div>
       <div class="md:flex-1 hidden md:flex items-center justify-center">
-        <img class="rounded-full md:p-40 transition-transform hover:scale-125 lg:p-24 w-full h-full"
-          src="~/assets/img/hero.jpg" alt="Starship starts the engine" loading="eager" format="avif" width="512"
-          height="512">
+        <div class="w-full h-full md:p-40 lg:p-24">
+          <img class="rounded-full transition-transform hover:scale-125 w-full h-full" src="~/assets/img/hero.jpg"
+            alt="Starship starts the engine" loading="eager" format="avif" width="512" height="512">
+        </div>
       </div>
     </div>
     <div class="mb-5 lg:mt-0 mt-5">
@@ -86,6 +87,7 @@ const icons = computed(() => {
       <div class="md:text-xl text-base break-all md:p-0 px-10 text-gray-400">{{ $t('home.btodesc') }}</div>
       <div class="text-black bg-white rounded-md p-4 cursor-pointer">{{ $t('btn.start') }}</div>
     </div>
+    <OpenAI></OpenAI>
   </div>
 </template>
 
