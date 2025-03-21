@@ -6,3 +6,9 @@ export interface Data<T> {
   refresh: Function;
   [key: string]: any;
 }
+export type Role="function" | "user" | "assistant"
+export interface MessageListItem {
+  role: Role,
+  content: string;
+  name: string;
+}

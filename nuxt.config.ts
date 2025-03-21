@@ -99,4 +99,13 @@ export default defineNuxtConfig({
       }),
     ]
   },
+  typescript: {
+    tsConfig: {
+      compilerOptions: {
+        module: 'esnext', // 支持 import.meta
+        target: 'esnext', // 目标 ES 版本
+        moduleResolution:'node',
+      },
+    },
+  },
 })
