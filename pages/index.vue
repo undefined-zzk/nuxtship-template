@@ -87,9 +87,6 @@ const icons = computed(() => {
       <div class="md:text-xl text-base break-all md:p-0 px-10 text-gray-400">{{ $t('home.btodesc') }}</div>
       <div class="text-black bg-white rounded-md p-4 cursor-pointer">{{ $t('btn.start') }}</div>
     </div>
-    <KeepAlive>
-      <OpenAI></OpenAI>
-    </KeepAlive>
   </div>
 </template>
 

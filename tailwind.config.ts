@@ -17,6 +17,15 @@ export default <Partial<Config>>{
       fontFamily: {
         sans: ['Roboto', 'Roboto fallback', ...fontFamily.sans],
       },
+      animation: {
+        drawer: 'drawerT 0.4s ease-in-out',
+      },
+      keyframes: {
+        drawerT: {
+          '0%': { transform: 'translateX(100%)' },
+          '100%': { transform: 'translateX(0)' },
+        },
+      },
     },
   },
   plugins: [

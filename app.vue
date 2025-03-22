@@ -4,6 +4,7 @@ const route = useRoute()
 <template>
   <NuxtLayout>
     <NuxtPage />
+    <OpenAI></OpenAI>
   </NuxtLayout>
 </template>
 

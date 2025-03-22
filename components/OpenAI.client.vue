@@ -2,7 +2,6 @@
 import OpenAI from "openai";
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
-import { useMessage } from 'naive-ui';
 import type { MessageListItem, Role } from '~/types'
 const aiRef = ref<HTMLElement>()
 const { style } = useDraggable(aiRef, {
@@ -16,12 +15,12 @@ const startLoading = ref(false);
 const userScroll = ref(false)
 const textarea = ref('给我一段简单的 JavaScript 代码示例,实现网格布局.');
 const showPopover = ref(false);
-const message = useMessage();
 const messageList = ref<MessageListItem[]>([]);
 const role = ref<Role>('assistant');
 const contentRef = ref<HTMLElement>();
 const content = ref('');
 const isProgrammaticScroll = ref(false)
+const showAiModal = ref(false)
 let timer: any = null
 let controller: any = null;
 
@@ -33,30 +32,41 @@ const openai = new OpenAI({
     timeout: 60000
 });
 
+watch(showAiModal, () => {
+    if (showAiModal.value) {
+        document.body.style.overflow = 'hidden'
+    } else {
+        document.body.style.overflow = 'auto'
+    }
+})
 
+const clearIntervalFn = () => {
+    timer && clearInterval(timer)
+}
 
 const scrollBto = () => {
     timer && clearInterval(timer)
     timer = setInterval(() => {
         if (userScroll.value) {
-            clearInterval(timer)
+            clearIntervalFn()
             return
         }
         if (contentRef.value) {
             contentRef.value.scrollTo(0, contentRef.value.scrollHeight);
         }
-    }, 100)
+    }, 10)
     contentRef.value!.addEventListener('scroll', () => {
         if (isProgrammaticScroll.value) {
             isProgrammaticScroll.value = false
             return
         }
         userScroll.value = true
-        clearInterval(timer)
+        clearIntervalFn()
     })
 };
 
-async function main(e: KeyboardEvent) {
+async function main(e: any) {
+    console.log('aaa');
     if (e.shiftKey) return  // shift + enter 不阻止默认行为实现换行
     e.preventDefault();
     if (!textarea.value && !loading.value && !startLoading.value) {
@@ -107,19 +117,19 @@ async function main(e: KeyboardEvent) {
         if (error.name !== 'AbortError') {
             console.error("请求失败:", error);
         } else {
-            message.warning(error.message);
         }
     } finally {
         loading.value = false;
         controller = null;
+        clearIntervalFn()
     }
 }
 
-const stopWatch = watch(textarea, () => {
-    if (textarea.value) {
-        showPopover.value = false;
-    }
-});
+// const stopWatch = watch(textarea, () => {
+//     if (textarea.value) {
+//         showPopover.value = false;
+//     }
+// });
 
 const cancelMain = () => {
     if (controller) {
@@ -142,43 +152,57 @@ const cancelMain = () => {
 
 <template>
     <div>
-        <div ref="aiRef" :style="style"
-            class="fixed text-xs cursor-pointer z-50 flex justify-center items-center w-12 h-12 lg:w-14 lg:h-14 bg-slate-100 shadow-lg dark:bg-slate-800 rounded-full">
+        <div ref="aiRef" :style="style" v-if="!showAiModal" @click="showAiModal = true"
+            class="fixed text-xs cursor-pointer z-50 flex justify-center items-center w-12 h-12 lg:w-14 lg:h-14 bg-slate-100 shadow-lg dark:bg-[#292A2D] rounded-full">
             <span>AI助手</span>
         </div>
-        <div class="fixed right-0 bottom-0 h-screen lg:w-1/3 ">
-            <header class="text-center h-10 leading-10 flex items-center justify-center gap-2">
-                <span>DeepSeek AI</span>
-                <img src="~/assets/icons/loading.svg" class="w-4 h-4" alt=""
-                    :class="loading ? 'animate-spin' : 'hidden'">
-            </header>
-            <section class="w-full flex-1 border rounded-md p-4 overflow-y-auto overflow-x-hidden" ref="contentRef">
-                <div v-if="startLoading" class="text-center text-gray-500 text-sm">DeepSeek 正在思考中...</div>
-                <div v-html="content"></div>
-            </section>
-            <footer class="text-center min-h-[100px] max-h-[300px] bg-[#F3F4F6] p-3 rounded-md">
-                <textarea :readonly="loading" placeholder="给 DeepSeek 发送消息"
-                    class="w-full h-36 resize-none p-2 outline-none rounded-md focus:border-[#D6DEE8] bg-transparent text-gray-800"
-                    rows="2" v-model.trim="textarea" @keydown.enter="main"></textarea>
-                <div class="flex justify-end">
-                    <!-- <n-tooltip :show="showPopover" placement="bottom">
-                        <template #trigger>
-                            <button class="w-10 h-10 flex justify-center items-center rounded-full bg-[#D6DEE8]"
-                                :class="!textarea && !loading ? 'cursor-not-allowed' : ''" @click.stop="main">
-                                <img src="~/assets/icons/send.svg" class="w-6 h-6" alt=""
-                                    :class="(!loading && !startLoading) ? 'block' : 'hidden'">
-                                <img src="~/assets/icons/loading.svg" class="w-6 h-6"
-                                    :class="startLoading ? 'animate-spin' : 'hidden'" alt="">
-                                <img src="~/assets/icons/stop.svg" @click.stop="cancelMain" class="w-6 h-6"
-                                    :class="(!startLoading && loading) ? 'block' : 'hidden'" alt="">
-                            </button>
-                        </template>
-<span>请输入你的问题</span>
-</n-tooltip> -->
-                </div>
-            </footer>
+        <div v-show="showAiModal" class="fixed right-0 bottom-0 left-0 top-0 bg-black/50 w-screen h-screen">
+            <div
+                class="fixed motion-safe:animate-drawer z-10 right-0 bottom-0 bg-slate-600 dark:bg-[#292A2D] h-screen md:w-2/3 w-full p-4 flex flex-col gap-4">
+                <header class="text-center select-none h-10 leading-10 flex items-center justify-between gap-2">
+                    <div>
+                        <img src="~/assets/icons/hamburger.svg" class="w-4 h-4 cursor-pointer" alt="">
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-white">AI助手 - DeepSeek</span>
+                        <img src="~/assets/icons/loading.svg" class="w-4 h-4" alt=""
+                            :class="loading ? 'animate-spin' : 'hidden'">
+                    </div>
+                    <div class="">
+                        <img src="~/assets/icons/close.svg" class="w-4 h-4 cursor-pointer" @click="showAiModal = false"
+                            alt="">
+                    </div>
+                </header>
+                <section class="w-full flex-1 border rounded-md p-4 overflow-y-auto overflow-x-hidden" ref="contentRef">
+                    <div class="text-white" v-html="content"></div>
+                </section>
+                <footer
+                    class="text-center max-h-[300px] sm:min-h-[160px] bg-[#F3F4F6] dark:bg-[#404045] p-3 rounded-md">
+                    <textarea :readonly="loading" placeholder="给 AI助手 - DeepSeek 发送消息"
+                        class="w-full md:h-36 sm:h-24 resize-none p-2 outline-none rounded-md focus:border-[#D6DEE8] bg-transparent dark:bg-[#404045] dark:text-white text-gray-800"
+                        rows="2" v-model.trim="textarea" @keydown.enter="main"></textarea>
+                    <div class="flex justify-end">
+                        <button
+                            class="md:w-10 md:h-10 w-8 h-8 flex justify-center items-center rounded-full bg-[#D6DEE8]"
+                            :class="!textarea && !loading ? 'cursor-not-allowed' : ''" @click.stop="main">
+                            <img src="~/assets/icons/send.svg" class="w-6 h-6" alt=""
+                                :class="(!loading && !startLoading) ? 'block' : 'hidden'">
+                            <img src="~/assets/icons/loading.svg" class="w-6 h-6"
+                                :class="startLoading ? 'animate-spin' : 'hidden'" alt="">
+                            <img src="~/assets/icons/stop.svg" @click.stop="cancelMain" class="w-6 h-6"
+                                :class="(!startLoading && loading) ? 'block' : 'hidden'" alt="">
+                        </button>
+                        <!-- <span>请输入你的问题</span> -->
+                    </div>
+                </footer>
+            </div>
         </div>
     </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+pre code {
+    border-radius: 8px !important;
+    margin: 10px 0;
+}
+</style>

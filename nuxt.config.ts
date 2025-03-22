@@ -22,12 +22,17 @@ export default defineNuxtConfig({
   imports: {
     dirs: ['composables/**'],
   },
-  modules: ['@nuxt/ui', [
-    '@pinia/nuxt',
-    {
-      autoImports: ['defineStore'],
-    },
-  ], '@nuxtjs/i18n', 'nuxtjs-naive-ui', '@vueuse/nuxt'],
+  modules: [
+    '@nuxt/ui',
+    [
+      '@pinia/nuxt',
+      {
+        autoImports: ['defineStore'],
+      },
+    ],
+    '@nuxtjs/i18n',
+    '@vueuse/nuxt',
+  ],
   i18n: {
     vueI18n: '~/locales/i18n.config.ts',
     locales: ['en', 'zh'],
@@ -81,30 +86,14 @@ export default defineNuxtConfig({
     optimizeDeps: {
       include: ['vueuc'], // 显式包含 vueuc
     },
-    plugins:[
-      AutoImport({
-        imports: [
-          {
-            'naive-ui': [
-              'useDialog',
-              'useMessage',
-              'useNotification',
-              'useLoadingBar'
-            ]
-          }
-        ]
-      }),
-      Components({
-        resolvers: [NaiveUiResolver()],
-      }),
-    ]
+    plugins: [AutoImport({}), Components({})],
   },
   typescript: {
     tsConfig: {
       compilerOptions: {
         module: 'esnext', // 支持 import.meta
         target: 'esnext', // 目标 ES 版本
-        moduleResolution:'node',
+        moduleResolution: 'node',
       },
     },
   },
