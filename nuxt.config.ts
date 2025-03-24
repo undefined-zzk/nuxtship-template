@@ -32,6 +32,7 @@ export default defineNuxtConfig({
     ],
     '@nuxtjs/i18n',
     '@vueuse/nuxt',
+    '@element-plus/nuxt'
   ],
   i18n: {
     vueI18n: '~/locales/i18n.config.ts',
@@ -66,7 +67,7 @@ export default defineNuxtConfig({
         },
       ],
       link: [
-        { rel: 'icon', type: 'image/vnd.microsoft.icon', href: '/favicon.ico' },
+        { rel: 'icon', type: 'image/svg+xml', href: '/skunk.svg' },
       ],
     },
   },

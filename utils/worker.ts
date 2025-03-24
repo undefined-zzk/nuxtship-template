@@ -2,7 +2,7 @@ import markdownit from "markdown-it";
 import hljs from "highlight.js";
 import DOMPurify from "dompurify";
 const md = markdownit({
-  highlight: function (str, lang) {
+  highlight: function (str:string, lang:string):string {
     if (lang && hljs.getLanguage(lang)) {
       try {
         const highlighted = hljs.highlight(str, {

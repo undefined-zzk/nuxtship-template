@@ -11,4 +11,9 @@ export interface MessageListItem {
   role: Role,
   content: string;
   name: string;
+  id: string;
+  answer:string
+  startLoading: boolean,
+  copySuccess:boolean,
+  refresh:number
 }
