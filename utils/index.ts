@@ -7,7 +7,7 @@ import type { MessageListItem } from '~/types';
  */
 export const checkStore = () => {
   let useage = 0;
-  const maxSpace = 5 * 1024 * 1024;
+  const maxSpace = 4.5 * 1024 * 1024;
   for (const key in localStorage) {
     if (localStorage.hasOwnProperty(key)) {
       const value = localStorage.getItem(key);
@@ -17,8 +17,8 @@ export const checkStore = () => {
   return {
     useage,// 已使用
     maxSpace,// 最大空间
-    percent: (useage / maxSpace) * 100, // 已使用百分比
-    isFull: useage >= maxSpace, // 是否已满
+    percent: +((useage / maxSpace) * 100).toFixed(2), // 已使用百分比
+    isFull: useage >= maxSpace, // 是否已满 留0.5M空间
   }
 };
 

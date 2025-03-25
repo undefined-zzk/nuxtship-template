@@ -32,7 +32,7 @@ const icons = computed(() => {
     </Head>
     <div class="lg:flex block lg:gap-x-10">
       <div class="flex-1 lg:pt-24 pt-10">
-        <div class="font-bold text-5xl lg:text-6xl xl:text-7xl lg:-tracking-tight">{{ $t('home.webtype') }}
+        <div class="font-bold text-5xl lg:text-6xl xl:text-7xl lg:-tracking-tight text-color">{{ $t('home.webtype') }}
         </div>
         <div class=" my-6 text-gray-500 text-xl">
           {{ $t('home.webdesc') }}
@@ -42,7 +42,7 @@ const icons = computed(() => {
             class="lg:w-32 md:mb-0 mb-3 rounded-md md:w-1/2 text-center py-3 border-2 border-gray-950 bg-text-color hover:bg-slate-700 hover:text-white bg-btn w-full cursor-pointer">
             {{ $t('btn.start') }}</div>
           <div
-            class="lg:w-32 rounded-md md:w-1/2 w-full text-center py-3 border-gray-950 dark:border-white border-2 cursor-pointer">
+            class="lg:w-32 rounded-md md:w-1/2 w-full text-center py-3 text-color border-gray-950 dark:border-white border-2 cursor-pointer">
             {{ $t('btn.viewrepo') }}</div>
         </div>
       </div>
@@ -54,7 +54,7 @@ const icons = computed(() => {
       </div>
     </div>
     <div class="mb-5 lg:mt-0 mt-5">
-      <div class="font-bold lg:text-5xl text-3xl -tracking-tight">
+      <div class="font-bold lg:text-5xl text-3xl -tracking-tight text-color">
         {{ $t('home.webfn') }}
       </div>
       <div class="text-gray-400 mt-5 text-lg">
@@ -80,7 +80,7 @@ const icons = computed(() => {
     </div>
     <div class="text-gray-400 text-center mt-20 mb-10">{{ $t('home.webitemsub') }}</div>
     <div class="flex items-center justify-center gap-10 flex-wrap">
-      <Icon class="md:text-6xl text-5xl" :name="icon" :key="idx" v-for="(icon, idx) in icons"></Icon>
+      <Icon class="md:text-6xl text-5xl text-color" :name="icon" :key="idx" v-for="(icon, idx) in icons"></Icon>
     </div>
     <div class="bg-slate-800 rounded-md flex flex-col items-center md:p-20 p-10 gap-5 my-10">
       <div class="text-white text-2xl lg:text-6xl">{{ $t('home.btotitle') }}</div>

@@ -15,5 +15,6 @@ export interface MessageListItem {
   answer:string
   startLoading: boolean,
   copySuccess:boolean,
-  refresh:number
+  refresh:number,
+  createtime:number
 }

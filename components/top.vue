@@ -11,9 +11,15 @@ const { locale } = useI18n()
 
 <template>
     <div class="mb-10 flex flex-col items-center gap-4">
-        <div class="md:text-5xl text-center text-4xl font-bold">{{ $t('top.title', { title: locale === 'en' ? title : zhtitle })
-            }}</div>
-        <div class="text-gray-500 text-xl text-center">{{ $t('top.subtitle', { subtitle: locale === 'en' ? desc : zhdesc }) }}</div>
+        <div class="md:text-5xl text-center text-4xl font-bold text-color">{{ $t('top.title', {
+            title: locale === 'en' ?
+                title : zhtitle
+        })
+        }}</div>
+        <div class="text-gray-500 text-xl text-center ">{{ $t('top.subtitle', {
+            subtitle: locale === 'en' ? desc :
+                zhdesc
+        }) }}</div>
     </div>
 </template>
 
