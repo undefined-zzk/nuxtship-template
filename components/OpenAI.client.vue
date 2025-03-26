@@ -27,6 +27,7 @@ const balLoading = ref(false)
 const clearLoading = ref(false)
 const isMove = ref(false)
 const hasBalance = ref(true)
+const currentKey = ref('2025-03-26')
 let moveTimer: NodeJS.Timeout
 let timer: NodeJS.Timeout
 let controller: any = null;
@@ -131,15 +132,13 @@ const scrollBto = () => {
     })
 };
 
-
-
 const cancelMain = () => {
     if (controller) {
         controller.abort();
         controller = null;
         loading.value = false;
         messageList.value = messageList.value.map(item => ({ ...item, startLoading: false }))
-        setStorage(messageList.value)
+        setStorage(currentKey.value, messageList.value)
     }
 };
 
@@ -163,7 +162,7 @@ const clearCache = () => {
             balLoading.value = true
             setTimeout(() => {
                 balLoading.value = false
-                removeStorage(0, true)
+                removeStorage(currentKey.value, 0, true)
                 messageList.value = []
                 ElMessage.success('清除成功')
             }, Math.random() * 1500)
@@ -207,7 +206,7 @@ async function sendMsgToDeepSeek() {
         const messageId = getNanoid()
         messageList.value.push({ role: role.value, content: textarea.value || tempTextarea.value, name: '', id: messageId, answer: '', startLoading: true, copySuccess: false, refresh: tempRefresh.value || 0, createtime: Date.now() });
         tempRefresh.value = 0
-        setStorage(messageList.value)
+        setStorage(currentKey.value, messageList.value)
         doneLoading.value = true
         textarea.value = ''
         scrollBto();
@@ -256,15 +255,15 @@ async function sendMsgToDeepSeek() {
         doneLoading.value = false
         controller = null;
         clearIntervalFn()
-        setStorage(messageList.value)
+        setStorage(currentKey.value, messageList.value)
     }
 }
 // 自动清理部分缓存
 function clearCacheByIndex() {
     const { isFull } = checkStore()
     if (isFull) {
-        removeStorage(10)
-        messageList.value = getStorage()
+        removeStorage(currentKey.value, 10)
+        messageList.value = getStorage()[currentKey.value]
     }
 }
 // 开启新的对话
@@ -273,9 +272,17 @@ function openNewChat() {
 
 }
 onMounted(async () => {
-    messageList.value = getStorage().map(item => ({ ...item, startLoading: false, copySuccess: false }))
-    await nextTick()
-    hljs.highlightAll();
+    try {
+        const cacheData = getStorage()
+        if (!cacheData[currentKey.value]) {
+            cacheData[currentKey.value] = []
+        }
+        messageList.value = cacheData[currentKey.value].map(item => ({ ...item, startLoading: false, copySuccess: false }))
+        await nextTick()
+        hljs.highlightAll();
+    } catch (e) {
+        console.log(e);
+    }
 })
 
 onBeforeUnmount(() => {
@@ -290,7 +297,7 @@ onBeforeUnmount(() => {
     <div>
         <div ref="aiRef" @mouseup="mouseUp" :style="style" v-if="!showAiModal" @click.stop="showModal"
             class="fixed text-xs cursor-pointer z-50 flex justify-center items-center w-12 h-12 lg:w-14 lg:h-14 text-color bg-slate-100 shadow-lg dark:bg-[#292A2D] rounded-full">
-            <span>AI助手</span>
+            <img src="~/assets/icons/ai-assisant.svg" alt="" class="w-6 h-6">
         </div>
         <div v-show="showAiModal"
             class="fixed motion-safe:animate-drawer z-10 right-0 bottom-0 bg-slate-600 dark:bg-[#292A2D] h-screen md:w-2/3 w-full p-4 flex flex-col gap-4">
@@ -307,9 +314,8 @@ onBeforeUnmount(() => {
                         alt="">
                 </div>
             </header>
-            <section
-                class="w-full flex-1 flex flex-col items-center justify-center rounded-md p-2 overflow-y-auto overflow-x-hidden"
-                ref="contentRef">
+            <section class="w-full flex-1 rounded-md p-2 overflow-y-auto overflow-x-hidden" ref="contentRef"
+                :class="messageList.length == 0 ? 'flex flex-col items-center justify-center' : ''">
                 <div v-for="item in messageList" :key="item.id">
                     <div class="text-block flex items-baseline justify-end gap-x-1 group mb-2">
                         <div class="group-hover:block hidden">
@@ -321,7 +327,7 @@ onBeforeUnmount(() => {
                             </el-tooltip>
                         </div>
                         <div
-                            class="bg-[#EFF6FF] rounded p-2 max-w-2/3 break-all text-sm relative after:content-[''] after:absolute after:-right-3 after:top-1 after:w-0 after:h-0 after:border-8 after:border-transparent after:border-l-[#EFF6FF]">
+                            class="bg-[#EFF6FF] rounded p-2 max-w-[66.66%] w-fit break-all text-sm relative after:content-[''] after:absolute after:-right-3 after:top-1 after:w-0 after:h-0 after:border-8 after:border-transparent after:border-l-[#EFF6FF]">
                             {{ item.content }}
                         </div>
                         <div class="w-10 h-10 overflow-hidden flex items-center justify-center">

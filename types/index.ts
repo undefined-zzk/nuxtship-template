@@ -18,3 +18,7 @@ export interface MessageListItem {
   refresh:number,
   createtime:number
 }
+
+export interface StoreObj{
+  [key:string]:MessageListItem[]
+}

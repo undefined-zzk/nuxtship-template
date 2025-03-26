@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid'
-import type { MessageListItem } from '~/types';
+import type { MessageListItem ,StoreObj} from '~/types';
 
 /**
  * 检查存储空间 和 已使用空间
@@ -35,8 +35,10 @@ export const getNanoid = () => nanoid()
  */
 
 const STORAGE_KEY = 'skunk';
-export const setStorage = (value: Array<MessageListItem>) => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(value))
+export const setStorage = (currentKey:string,value: MessageListItem[]) => {
+  const obj = getStorage()
+  obj[currentKey] = value
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(obj))
 }
 
 /**
@@ -44,23 +46,23 @@ export const setStorage = (value: Array<MessageListItem>) => {
  * @param key 
  * @returns Array<MessageListItem>
  */
-export const getStorage = ():MessageListItem[] => {
-  return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+export const getStorage = ():StoreObj => {
+  return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
 }
 
 /**
  * 删除数据
  * @param key
  */
-export const removeStorage = (endIndex: number = 0, all: boolean = false) => {
-  const list = getStorage()
+export const removeStorage = (currentKey:string,endIndex: number = 0, all: boolean = false) => {
+  const obj = getStorage()
   if (all) {
     localStorage.removeItem(STORAGE_KEY)
     return
   }
   if (endIndex <= 0) return
-  list.splice(0, endIndex)
-  setStorage(list)
+  obj[currentKey].splice(0, endIndex)
+  setStorage(currentKey,obj[currentKey])
 }
 
 export const copyToClipboard = (text: string) => {
@@ -94,4 +96,25 @@ export const copyToClipboard = (text: string) => {
       }
     }
   })
+}
+
+// 获取年月日时分秒
+export const getDateTime = (time: number=Date.now()) => {
+  const date = new Date(time);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hour = String(date.getHours()).padStart(2, '0');
+  const minute = String(date.getMinutes()).padStart(2, '0');
+  const second = String(date.getSeconds()).padStart(2, '0');
+  return {
+    fulltime:`${year}-${month}-${day} ${hour}:${minute}:${second}`,
+    datetime:`${year}-${month}-${day}`,
+    year,
+    month,
+    day,
+    hour,
+    minute,
+    second
+  }
 }
