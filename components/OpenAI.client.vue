@@ -302,7 +302,8 @@ function openAside(bol: boolean) {
                 const obj = {
                     time,
                     data: item,
-                    origin_time: key
+                    origin_time: key,
+                    title: item[0].content
                 }
                 asideData.value?.push(obj)
             }

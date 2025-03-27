@@ -26,6 +26,7 @@ export interface StoreObj{
 export interface AsideDataItem {
    time:string
    origin_time:string
+   title:string
    data:MessageListItem[]
 }
 
