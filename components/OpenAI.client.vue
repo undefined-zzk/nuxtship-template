@@ -37,7 +37,7 @@ const showAside = ref(false)
 const currentActiveDialog = ref('')
 const asideData = ref<AsideDataItem[]>([])
 const AINAME = 'AI助手Skunk-DeepSeek'
-const currentKey = ref(getDateTime().datetime)
+const currentKey = ref(getDateTime().fulltime)
 let moveTimer: NodeJS.Timeout
 let timer: NodeJS.Timeout
 let controller: any = null;
@@ -83,8 +83,6 @@ watch(showAiModal, async () => {
 watch(style, () => {
     isMove.value = true
 })
-
-
 
 const mouseUp = () => {
     moveTimer && clearTimeout(moveTimer)
@@ -279,8 +277,16 @@ function clearCacheByIndex() {
 // 开启新的对话
 function openNewChat() {
     clearCacheByIndex()
+    if (loading.value) {
+        cancelMain()
+    }
+    messageList.value = []
+    textarea.value = ''
+    tempTextarea.value = ''
+    textareaRef.value?.focus()
 }
 
+// 打开历史记录侧边栏
 function openAside(bol: boolean) {
     if (balLoading.value) return
     showAside.value = bol
@@ -300,6 +306,7 @@ function openAside(bol: boolean) {
                 }
                 asideData.value?.push(obj)
             }
+            currentActiveDialog.value = currentKey.value
         } catch (e) {
             console.log('e', e);
         } finally {
@@ -346,7 +353,9 @@ function removeHistory(origin_time: string, id: string) {
 // 打开历史记录
 async function openHistory(key: string) {
     if (currentKey.value === key) return
-    if (loading.value) return ElMessage.warning('正在对话中,请稍后切换')
+    if (loading.value) {
+        cancelMain()
+    }
     messageList.value = getStorage()[key]
     currentActiveDialog.value = key
     showAside.value = false
@@ -491,15 +500,16 @@ onBeforeUnmount(() => {
                     </el-tooltip>
                 </div>
             </footer>
-            <aside v-if="showAside" class="h-screen w-full absolute left-0 bg-[rgba(0,0,0,0.3)] top-0 overflow-hidden"
-                @click.stop="openAside(false)">
-                <div class="h-screen w-80 bg-[#ebf1fc] p-4 motion-safe:animate-drawerleft">
+            <aside v-if="showAside" class="h-screen w-full absolute left-0 top-0 overflow-hidden">
+                <div class="h-screen w-full absolute left-0 bg-[rgba(0,0,0,0.3)] top-0" @click.stop="openAside(false)">
+                </div>
+                <div class="h-screen w-80 absolute z-10 bg-[#ebf1fc] p-4 motion-safe:animate-drawerleft">
                     <header class="flex items-center justify-between mb-5">
                         <h3>{{ AINAME }}</h3>
                         <img src="~/assets/icons/aside.svg" class="w-5 h-5 cursor-pointer"
                             @click.stop="openAside(false)" />
                     </header>
-                    <div class="flex items-center h-10" @click="openNewChat">
+                    <div class="flex items-center h-10" @click.stop="openNewChat">
                         <div
                             class="text-[#646BFE] w-full h-full bg-[#DBEAFE] text-sm cursor-pointer flex items-center justify-center gap-x-2 py-1 px-2 rounded-lg">
                             <img src="~/assets/icons/modal.svg" class="w-5 h-5" alt=""><span>开启新的对话</span>
@@ -511,7 +521,7 @@ onBeforeUnmount(() => {
                             <h3 class="text-[#555570] font-bold my-1 px-2 text-sm">{{ item.time }}</h3>
                             <div v-for="child in item.data" :key="child.id"
                                 :class="currentActiveDialog === item.origin_time ? 'bg-[#DAE9FD]' : ''"
-                                class="flex justify-between items-center h-9 hover:bg-[#DAE9FD] cursor-pointer rounded-xl py-1 px-2">
+                                class="flex justify-between items-center h-9 hover:bg-[#DAE9FD] cursor-pointer rounded-xl py-1 px-2 mb-1">
                                 <div @click.stop="openHistory(item.origin_time)"
                                     class="text-sm flex-1 whitespace-nowrap overflow-hidden text-ellipsis">{{
                                         child.content.slice(0, 30) }}</div>
