@@ -98,7 +98,11 @@ export const copyToClipboard = (text: string) => {
   })
 }
 
-// 获取年月日时分秒
+/**
+ * 获取年月日时分秒
+ * @param time 
+ * @returns 
+ */
 export const getDateTime = (time: number=Date.now()) => {
   const date = new Date(time);
   const year = date.getFullYear();

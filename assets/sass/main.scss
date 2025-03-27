@@ -1,18 +1,35 @@
-@use '../const/index.scss';
+@use "../const/index.scss";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@layer utilities{
-   .bg-color{
-      background-color: var(--bg-color);
-   }
-   .text-color{
-      color: var(--text-color);
-   }
-   .bg-btn{
-     background-color: var(--bg-btn);
-   }
-   .bg-text-color{
-     color: var(--btn-text-color);
-   }
+@layer utilities {
+  .bg-color {
+    background-color: var(--bg-color);
+  }
+  .text-color {
+    color: var(--text-color);
+  }
+  .bg-btn {
+    background-color: var(--bg-btn);
+  }
+  .bg-text-color {
+    color: var(--btn-text-color);
+  }
+  .scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  .scrollbar::-webkit-scrollbar-track {
+    @apply bg-gray-100;
+  }
+  .scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-gray-400 rounded-full;
+  }
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-500;
+  }
+  .scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: theme("colors.gray.400") theme("colors.gray.100");
+  }
 }

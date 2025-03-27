@@ -22,3 +22,11 @@ export interface MessageListItem {
 export interface StoreObj{
   [key:string]:MessageListItem[]
 }
+
+export interface AsideDataItem {
+   time:string
+   origin_time:string
+   data:MessageListItem[]
+}
+
+export interface AsideData {}

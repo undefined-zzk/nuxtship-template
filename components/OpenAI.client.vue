@@ -2,7 +2,12 @@
 import OpenAI from "openai";
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
-import type { MessageListItem, Role } from '~/types'
+import dayjs from 'dayjs'
+import 'dayjs/locale/zh-cn'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import { orderBy } from 'lodash'
+import type { MessageListItem, Role, AsideDataItem } from '~/types'
+dayjs.extend(relativeTime)
 const aiRef = ref<HTMLElement>()
 const { style } = useDraggable(aiRef, {
     initialValue: {
@@ -25,9 +30,14 @@ const showAiModal = ref(false)
 const tempRefresh = ref(0)
 const balLoading = ref(false)
 const clearLoading = ref(false)
+const asideLoading = ref(false)
 const isMove = ref(false)
 const hasBalance = ref(true)
-const currentKey = ref('2025-03-26')
+const showAside = ref(false)
+const currentActiveDialog = ref('')
+const asideData = ref<AsideDataItem[]>([])
+const AINAME = 'AI助手Skunk-DeepSeek'
+const currentKey = ref(getDateTime().datetime)
 let moveTimer: NodeJS.Timeout
 let timer: NodeJS.Timeout
 let controller: any = null;
@@ -151,7 +161,7 @@ const showModal = () => {
 const clearCache = () => {
     ElMessageBox.confirm(
         '确定清除缓存吗?将失去所有的对话内容',
-        '缓存清理',
+        '对话清理',
         {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -269,8 +279,81 @@ function clearCacheByIndex() {
 // 开启新的对话
 function openNewChat() {
     clearCacheByIndex()
-
 }
+
+function openAside(bol: boolean) {
+    if (balLoading.value) return
+    showAside.value = bol
+    if (bol) {
+        try {
+            asideLoading.value = true
+            asideData.value = []
+            const cacheData = getStorage()
+            const data = orderBy(Object.entries(cacheData), ([key]) => new Date(key), ['desc'])
+            for (let key in Object.fromEntries(data)) {
+                const time = dayjs(key).locale('zh-cn').fromNow()
+                const item = Object.fromEntries(data)[key]
+                const obj = {
+                    time,
+                    data: item,
+                    origin_time: key
+                }
+                asideData.value?.push(obj)
+            }
+        } catch (e) {
+            console.log('e', e);
+        } finally {
+            asideLoading.value = false
+        }
+    }
+}
+
+// 删除
+function removeHistory(origin_time: string, id: string) {
+    ElMessageBox.confirm(
+        '删除后，该对话将不可恢复。确认删除吗？',
+        '永久删除对话',
+        {
+            confirmButtonText: '删除',
+            cancelButtonText: '取消',
+            type: 'warning',
+        }
+    )
+        .then(() => {
+            asideData.value = asideData.value.map(item => {
+                if (item.origin_time == origin_time) {
+                    item.data = item.data.filter(i => i.id !== id)
+                }
+                return item
+            }).filter(item => item.data.length > 0)
+            removeStorage(currentKey.value, 0, true)
+            asideData.value.forEach(item => {
+                setStorage(item.origin_time, item.data)
+            })
+            if (origin_time === currentKey.value) {
+                // 删除的是当前的对话
+                messageList.value = []
+                textarea.value = ''
+                tempTextarea.value = ''
+                cancelMain()
+            }
+        })
+        .catch(() => {
+
+        })
+}
+
+// 打开历史记录
+async function openHistory(key: string) {
+    if (currentKey.value === key) return
+    if (loading.value) return ElMessage.warning('正在对话中,请稍后切换')
+    messageList.value = getStorage()[key]
+    currentActiveDialog.value = key
+    showAside.value = false
+    await nextTick()
+    contentRefScroll()
+}
+
 onMounted(async () => {
     try {
         const cacheData = getStorage()
@@ -303,18 +386,18 @@ onBeforeUnmount(() => {
             class="fixed motion-safe:animate-drawer z-10 right-0 bottom-0 bg-slate-600 dark:bg-[#292A2D] h-screen md:w-2/3 w-full p-4 flex flex-col gap-4">
             <CssLoading v-if="balLoading"></CssLoading>
             <header class="text-center select-none h-10 leading-10 flex items-center justify-between gap-2">
-                <div>
+                <div @click.stop="openAside(true)">
                     <img src="~/assets/icons/hamburger.svg" class="w-4 h-4 cursor-pointer" alt="">
                 </div>
                 <div class="flex items-center gap-2">
-                    <span class="text-white">AI助手Skunk-DeepSeek</span>
+                    <span class="text-white">{{ AINAME }}</span>
                 </div>
                 <div class="">
                     <img src="~/assets/icons/close.svg" class="w-4 h-4 cursor-pointer" @click="showAiModal = false"
                         alt="">
                 </div>
             </header>
-            <section class="w-full flex-1 rounded-md p-2 overflow-y-auto overflow-x-hidden" ref="contentRef"
+            <section class="w-full flex-1 rounded-md p-2 overflow-y-auto overflow-x-hidden scrollbar" ref="contentRef"
                 :class="messageList.length == 0 ? 'flex flex-col items-center justify-center' : ''">
                 <div v-for="item in messageList" :key="item.id">
                     <div class="text-block flex items-baseline justify-end gap-x-1 group mb-2">
@@ -380,7 +463,7 @@ onBeforeUnmount(() => {
                 <div class="flex justify-end gap-x-2">
                     <el-tooltip effect="dark" placement="top" v-if="!loading">
                         <template #content>
-                            <span>清除缓存</span>
+                            <span>清除所有对话</span>
                         </template>
                         <button
                             class="md:w-10 md:h-10 w-8 h-8 flex justify-center items-center rounded-full bg-[#D6DEE8]"
@@ -408,6 +491,38 @@ onBeforeUnmount(() => {
                     </el-tooltip>
                 </div>
             </footer>
+            <aside v-if="showAside" class="h-screen w-full absolute left-0 bg-[rgba(0,0,0,0.3)] top-0 overflow-hidden"
+                @click.stop="openAside(false)">
+                <div class="h-screen w-80 bg-[#ebf1fc] p-4 motion-safe:animate-drawerleft">
+                    <header class="flex items-center justify-between mb-5">
+                        <h3>{{ AINAME }}</h3>
+                        <img src="~/assets/icons/aside.svg" class="w-5 h-5 cursor-pointer"
+                            @click.stop="openAside(false)" />
+                    </header>
+                    <div class="flex items-center h-10" @click="openNewChat">
+                        <div
+                            class="text-[#646BFE] w-full h-full bg-[#DBEAFE] text-sm cursor-pointer flex items-center justify-center gap-x-2 py-1 px-2 rounded-lg">
+                            <img src="~/assets/icons/modal.svg" class="w-5 h-5" alt=""><span>开启新的对话</span>
+                        </div>
+                    </div>
+                    <!-- 历史记录 -->
+                    <div class="mt-5 h-[calc(100%-100px)] overflow-y-hidden hover:overflow-y-auto scrollbar">
+                        <div v-for="item in asideData" :key="item.time" class="mb-3">
+                            <h3 class="text-[#555570] font-bold my-1 px-2 text-sm">{{ item.time }}</h3>
+                            <div v-for="child in item.data" :key="child.id"
+                                :class="currentActiveDialog === item.origin_time ? 'bg-[#DAE9FD]' : ''"
+                                class="flex justify-between items-center h-9 hover:bg-[#DAE9FD] cursor-pointer rounded-xl py-1 px-2">
+                                <div @click.stop="openHistory(item.origin_time)"
+                                    class="text-sm flex-1 whitespace-nowrap overflow-hidden text-ellipsis">{{
+                                        child.content.slice(0, 30) }}</div>
+                                <img src="~/assets/icons/remove.svg"
+                                    @click.stop="removeHistory(item.origin_time, child.id)" alt=""
+                                    class="w-4 h-4 cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
         </div>
     </div>
 </template>
