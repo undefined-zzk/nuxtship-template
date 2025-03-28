@@ -60,9 +60,13 @@ export const removeStorage = (currentKey:string,endIndex: number = 0, all: boole
     localStorage.removeItem(STORAGE_KEY)
     return
   }
-  if (endIndex <= 0) return
-  obj[currentKey].splice(0, endIndex)
-  setStorage(currentKey,obj[currentKey])
+  if (endIndex <= 0) {
+    delete obj[currentKey]
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(obj))
+  }else{
+    obj[currentKey].splice(0, endIndex)
+    setStorage(currentKey,obj[currentKey])
+  }
 }
 
 export const copyToClipboard = (text: string) => {
@@ -103,7 +107,7 @@ export const copyToClipboard = (text: string) => {
  * @param time 
  * @returns 
  */
-export const getDateTime = (time: number=Date.now()) => {
+export const getDateTime = (time: number|string=Date.now()) => {
   const date = new Date(time);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -121,4 +125,54 @@ export const getDateTime = (time: number=Date.now()) => {
     minute,
     second
   }
+}
+
+export const getTimeFromNow=(time:string|number)=>{
+    const date = new Date(time);
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    const months = Math.floor(days / 30);
+    const years = Math.floor(months / 12);
+    if (years > 0) {
+      return `${years}年前`; // 1年前
+    } else if (months > 0) {
+      return `${months}月前`; // 1月前  11月前
+    } else if(days<1){
+      return `今天`
+    }else if(days<2){
+      return `昨天`
+    }else if (days < 7) {
+      return `${days}天前`; // 1天前
+    } else if (days >= 7) {
+      return `7天前`; // 1天前  11天前
+    } else{
+      return getDateTime(time).datetime
+    }
+}
+
+const DIALOGKEY='shunk-dialog-key'
+/**
+ * 缓存当前对话key
+ * @param key 
+ */
+export const setDialogKey=(value:string=getDateTime().fulltime)=>{
+    localStorage.setItem(DIALOGKEY,value)
+}
+
+/**
+ * 获取当前对话key
+ * @returns 
+ */
+export const getDialogKey=()=>{
+    return localStorage.getItem(DIALOGKEY) || getDateTime().fulltime
+}
+/**
+ * 删除当前对话key
+ */   
+export const removeDialogKey=()=>{
+    localStorage.removeItem(DIALOGKEY)
 }

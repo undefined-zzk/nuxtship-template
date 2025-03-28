@@ -14,7 +14,6 @@ interface Home {
 
 }
 const { locale } = useI18n()
-
 const { data: weblist } = useFetch<Home[]>('/api/home')
 
 const icons = computed(() => {

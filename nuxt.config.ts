@@ -17,6 +17,7 @@ export default defineNuxtConfig({
     apiSecret: 'jjfa85093fjKFJ_42)(_',
     public: {
       baseUrl: '',
+      deepseekApiKey:process.env.DEEPSEEK_API_KEY,
     },
   },
   imports: {
@@ -32,7 +33,7 @@ export default defineNuxtConfig({
     ],
     '@nuxtjs/i18n',
     '@vueuse/nuxt',
-    '@element-plus/nuxt'
+    '@element-plus/nuxt',
   ],
   i18n: {
     vueI18n: '~/locales/i18n.config.ts',
