@@ -504,8 +504,8 @@ onBeforeUnmount(() => {
                     </div>
                     <div class="text-sm">我可以帮你写代码、写作等，请把你的任务交给我吧~</div>
                 </div>
-                <div v-if="userScroll" @click.stop="contentRefScroll"
-                    class="absolute right-6 bottom-0 cursor-pointer w-8 h-8 rounded-full flex items-center justify-center dark:bg-[#404045] shadow bg-[#F3F4F6]">
+                <div v-if="userScroll && messageList.length > 0" @click.stop="contentRefScroll"
+                    class="absolute z-50 right-6 bottom-0 cursor-pointer w-8 h-8 rounded-full flex items-center justify-center dark:bg-[#404045] shadow bg-[#F3F4F6]">
                     <img src="~/assets/icons/down.svg" class="w-4 h-4" alt="">
                 </div>
             </section>
