@@ -2,6 +2,7 @@
 import OpenAI from "openai";
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github-dark.css';
+import { DynamicScroller } from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { orderBy } from 'lodash'
 import type { MessageListItem, Role, AsideDataItem } from '~/types'
@@ -19,7 +20,7 @@ const tempTextarea = ref('')
 const showPopover = ref(false);
 const messageList = ref<MessageListItem[]>([]);
 const role = ref<Role>('user');
-const contentRef = ref<HTMLElement>();
+const contentRef = ref<InstanceType<typeof DynamicScroller>>();
 const textareaRef = ref<HTMLElement>()
 // const isProgrammaticScroll = ref(false)
 const doneLoading = ref(false)
@@ -35,6 +36,9 @@ const currentActiveDialog = ref('')
 const asideData = ref<AsideDataItem[]>([])
 const AINAME = 'AI助手Skunk-DeepSeek'
 const currentKey = ref()
+const prevScrollTop = ref(0)
+const currentScrollTop = ref(0)
+const sectionRef = ref()
 let moveTimer: NodeJS.Timeout
 let timer: NodeJS.Timeout
 let controller: any = null;
@@ -71,8 +75,8 @@ watch(showAiModal, async () => {
         } catch (e) {
         } finally {
             textareaRef.value?.focus()
-            contentRefScroll()
             balLoading.value = false
+            contentRefScroll()
         }
     } else {
         document.body.style.overflow = 'auto'
@@ -122,22 +126,12 @@ const clearIntervalFn = () => {
 const scrollBto = () => {
     timer && clearInterval(timer)
     timer = setInterval(() => {
-        // console.log('userScroll', userScroll.value);
         if (userScroll.value) {
             clearIntervalFn()
             return
         }
         contentRefScroll()
     }, 100)
-    contentRef.value!.addEventListener('scroll', () => {
-        // console.log('isProgrammaticScroll', isProgrammaticScroll.value);
-        // if (isProgrammaticScroll.value) {
-        //     isProgrammaticScroll.value = false
-        //     return
-        // }
-        // userScroll.value = true
-        // clearIntervalFn()
-    })
 };
 
 const cancelMain = () => {
@@ -183,12 +177,19 @@ const clearCache = () => {
 
 function contentRefScroll() {
     if (contentRef.value) {
-        contentRef.value.scrollTo({
-            top: contentRef.value.scrollHeight,
-            behavior: 'smooth' // 启用平滑滚动
-        });
+        contentRef.value.scrollToBottom();
     }
 }
+
+function daynamicScrollerScroll(e: any) {
+    if (userScroll.value) return
+    currentScrollTop.value = e.target.scrollTop
+    if (currentScrollTop.value < prevScrollTop.value) {
+        userScroll.value = true
+    }
+    prevScrollTop.value = currentScrollTop.value
+}
+
 function errTipMsg(msg: string = '余额不足,无法继续对话,给作者打赏点吧!😭') {
     ElMessage.error(msg)
 }
@@ -219,6 +220,7 @@ async function sendMsgToDeepSeek() {
         doneLoading.value = true
         textarea.value = ''
         scrollBto();
+        console.log('fff');
         setTimeout(() => {
             doneLoading.value = false
         }, 2000)
@@ -242,7 +244,7 @@ async function sendMsgToDeepSeek() {
                     messageItem.startLoading = false
                     // isProgrammaticScroll.value = true
                     nextTick(() => {
-                        const codeBlocks = contentRef.value!.querySelectorAll('pre code') as any;
+                        const codeBlocks = sectionRef.value!.querySelectorAll('pre code') as any;
                         codeBlocks.forEach((block: any) => {
                             if (!block.dataset.highlighted) {
                                 hljs.highlightElement(block);
@@ -441,10 +443,10 @@ onBeforeUnmount(() => {
                         alt="">
                 </div>
             </header>
-            <section class="w-full flex-1 rounded-md p-2 overflow-x-hidden scrollbar"
+            <section ref="sectionRef" class="w-full relative flex-1 rounded-md p-2 overflow-x-hidden scrollbar"
                 :class="messageList.length == 0 ? 'flex flex-col items-center justify-center' : ''">
-                <DynamicScroller ref="contentRef" :items="messageList" :min-item-size="54" class="h-full scrollbar"
-                    v-show="messageList.length > 0">
+                <DynamicScroller ref="contentRef" :buffer="1000" :items="messageList" :min-item-size="54"
+                    class="h-full scrollbar" v-show="messageList.length > 0" @scroll.passive="daynamicScrollerScroll">
                     <template v-slot="{ item, index, active }">
                         <DynamicScrollerItem :item="item" :active="active" :size-dependencies="[
                             item.content, item.answer
@@ -501,6 +503,10 @@ onBeforeUnmount(() => {
                         <span class=" font-bold text-xl">我是AI助手Skunk-DeepSeek，很高兴见到你!</span>
                     </div>
                     <div class="text-sm">我可以帮你写代码、写作等，请把你的任务交给我吧~</div>
+                </div>
+                <div v-if="userScroll" @click.stop="contentRefScroll"
+                    class="absolute right-6 bottom-0 cursor-pointer w-8 h-8 rounded-full flex items-center justify-center dark:bg-[#404045] shadow bg-[#F3F4F6]">
+                    <img src="~/assets/icons/down.svg" class="w-4 h-4" alt="">
                 </div>
             </section>
             <div class="flex items-center justify-center h-10" v-if="messageList.length > 0">
