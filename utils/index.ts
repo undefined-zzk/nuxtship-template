@@ -69,8 +69,19 @@ export const removeStorage = (currentKey:string,endIndex: number = 0, all: boole
   }
 }
 
-export const copyToClipboard = (text: string) => {
+/**
+ * 转换为纯文本
+ * @param str 
+ * @returns 
+ */
+export const domParserText= (str:string)=>{
+   return new DOMParser().parseFromString(str, 'text/html').body.textContent || ''
+}
+
+export const copyToClipboard = (str: string) => {
   return new Promise((resolve) => {
+    // 转换为纯文本 去除html标签
+    const text=domParserText(str)
     // 检查是否支持 Clipboard API
     if (navigator.clipboard && navigator.clipboard.writeText) {
       // 使用 Clipboard API
@@ -153,6 +164,13 @@ export const getTimeFromNow=(time:string|number)=>{
       return getDateTime(time).datetime
     }
 }
+/**
+ * 发送消息前判断当前缓存的日期是否是今天
+ * @param time 
+ * @returns true
+ */
+
+
 
 const DIALOGKEY='shunk-dialog-key'
 /**
@@ -175,4 +193,11 @@ export const getDialogKey=()=>{
  */   
 export const removeDialogKey=()=>{
     localStorage.removeItem(DIALOGKEY)
+}
+
+export const isToday=()=>{
+  const time=getDialogKey()
+  const date = new Date(time);
+  const now = new Date();
+  return date.getFullYear()===now.getFullYear() && date.getMonth()===now.getMonth() && date.getDate()===now.getDate()
 }

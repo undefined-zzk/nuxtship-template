@@ -76,6 +76,14 @@ export default defineNuxtConfig({
     prerender: {
       routes: [],
     },
+    devProxy: {
+      // '/api':{
+      //  target: 'https://api.deepseek.com', // 目标 API 地址
+      //  changeOrigin: true, // 修改请求头中的 Origin
+      //  secure: false, // 如果是 HTTPS，可能需要关闭证书验证（开发环境）
+      //  rewrite: (path:string) => path.replace(/^\/api/, '')
+      // }
+   }
   },
   vite: {
     css: {

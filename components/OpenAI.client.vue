@@ -6,6 +6,7 @@ import { DynamicScroller } from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { orderBy } from 'lodash'
 import type { MessageListItem, Role, AsideDataItem } from '~/types'
+import { string } from "zod";
 const aiRef = ref<HTMLElement>()
 const { style } = useDraggable(aiRef, {
     initialValue: {
@@ -22,7 +23,6 @@ const messageList = ref<MessageListItem[]>([]);
 const role = ref<Role>('user');
 const contentRef = ref<InstanceType<typeof DynamicScroller>>();
 const textareaRef = ref<HTMLElement>()
-// const isProgrammaticScroll = ref(false)
 const doneLoading = ref(false)
 const showAiModal = ref(false)
 const tempRefresh = ref(0)
@@ -30,6 +30,10 @@ const balLoading = ref(false)
 const clearLoading = ref(false)
 const asideLoading = ref(false)
 const isMove = ref(false)
+const models = ref({
+    'chat': 'deepseek-chat',
+    'reasoner': 'deepseek-reasoner'
+})
 const hasBalance = ref(true)
 const showAside = ref(false)
 const currentActiveDialog = ref('')
@@ -39,17 +43,19 @@ const currentKey = ref()
 const prevScrollTop = ref(0)
 const currentScrollTop = ref(0)
 const sectionRef = ref()
+const TIMEOUT = 60 * 1000 // 60s
+const deepthink = ref(false)
 let moveTimer: NodeJS.Timeout
 let timer: NodeJS.Timeout
 let controller: any = null;
 const config = useRuntimeConfig()
 const APIKEY = config.public.deepseekApiKey
 const openai = new OpenAI({
-    baseURL: 'https://api.deepseek.com',
+    baseURL: 'https://api.deepseek.com/v1',
     apiKey: APIKEY,
     dangerouslyAllowBrowser: true,
 });
-
+// https://chat.deepseek.com/api/v0/file/upload_file
 const startLoading = computed(() => {
     return messageList.value.some(item => item.startLoading)
 })
@@ -74,9 +80,10 @@ watch(showAiModal, async () => {
             }
         } catch (e) {
         } finally {
-            textareaRef.value?.focus()
-            balLoading.value = false
+            highBlock()
             contentRefScroll()
+            balLoading.value = false
+            textareaRef.value?.focus()
         }
     } else {
         document.body.style.overflow = 'auto'
@@ -102,6 +109,7 @@ const stopWatch = watch(textarea, () => {
     }
 });
 
+// 复制文本
 const copy = async (item: MessageListItem, field: 'content' | 'answer') => {
     if (item.copySuccess) return
     await copyToClipboard(item[field]);
@@ -111,12 +119,14 @@ const copy = async (item: MessageListItem, field: 'content' | 'answer') => {
     }, 1000)
 }
 // 重新生成
-const refresh = (item: MessageListItem) => {
+const refresh = async (item: MessageListItem) => {
     tempRefresh.value = ++item.refresh
     messageList.value = messageList.value.filter(i => i.id !== item.id)
     textarea.value = ''
     tempTextarea.value = item.content
     sendMsgToDeepSeek()
+    await nextTick()
+    contentRefScroll()
 }
 
 const clearIntervalFn = () => {
@@ -202,15 +212,17 @@ async function main(e: any) {
     }
     if (loading.value || startLoading.value) return;
     if (!hasBalance.value) return errTipMsg()
+    if (!isToday()) {
+        currentKey.value = getDateTime().fulltime
+        setDialogKey(currentKey.value)
+    }
     sendMsgToDeepSeek()
 }
-// https://chat.deepseek.com/api/v0/file/upload_file
 async function sendMsgToDeepSeek() {
     try {
         clearCacheByIndex()
         await nextTick()
         userScroll.value = false
-        // isProgrammaticScroll.value = true
         controller = new AbortController();
         loading.value = true;
         const messageId = getNanoid()
@@ -220,47 +232,51 @@ async function sendMsgToDeepSeek() {
         doneLoading.value = true
         textarea.value = ''
         scrollBto();
-        console.log('fff');
         setTimeout(() => {
             doneLoading.value = false
         }, 2000)
+        const list = messageList.value.map(item => ({ role: item.role, content: item.content, answer: item.answer }))
+        const messages: any[] = []
+        list.forEach(item => {
+            const user = {
+                role: item.role, //'user'
+                content: item.content,
+            }
+            const assistant = {
+                role: 'assistant',
+                content: domParserText(item.answer)
+            }
+            messages.push(user, assistant)
+        })
+        // 确保最后一个是user
+        messages.splice(messages.length - 1, 1)
         const stream = await openai.chat.completions.create({
-            messages: [{ role: 'system', content: 'You are a helpful assistant', name: '' }, ...messageList.value.map(item => ({ role: item.role, content: item.content, name: item.name }))],
-            model: "deepseek-chat",
+            messages,
+            model: deepthink.value ? models.value['reasoner'] : models.value['chat'],
             stream: true,
-        }, { signal: controller.signal });
+        }, { signal: controller.signal, timeout: TIMEOUT });
         doneLoading.value = false
         let buffer = ''
         const messageItem = messageList.value.find(item => item.id === messageId)!
         // 开启新线程避免页面卡顿
         const worker = new Worker(new URL('../utils/worker', import.meta.url), { type: 'module' });
         for await (const chunk of stream) {
-            const chunkContent = chunk.choices[0]?.delta?.content || '';
+            const chunkContent = deepthink.value ? (chunk.choices[0].delta as any)?.reasoning_content || '' : chunk.choices[0]?.delta?.content || '';
             if (chunkContent) {
                 buffer += chunkContent
                 worker.postMessage({ buffer });
-                worker.onmessage = (event) => {
+                worker.onmessage = async (event) => {
                     messageItem.answer = event.data;
                     messageItem.startLoading = false
-                    // isProgrammaticScroll.value = true
-                    nextTick(() => {
-                        const codeBlocks = sectionRef.value!.querySelectorAll('pre code') as any;
-                        codeBlocks.forEach((block: any) => {
-                            if (!block.dataset.highlighted) {
-                                hljs.highlightElement(block);
-                                block.dataset.highlighted = true
-                            }
-                        });
-                    });
+                    await nextTick()
+                    highBlock()
                 }
             }
         }
     } catch (error: any) {
-        if (error.name !== 'AbortError') {
-            return
-        }
-        console.log('error', error);
-        ElMessage.error(error || '请求出错了,请稍后再试')
+        console.log(error);
+        ElMessage.error('请求超时或出错，请稍后再试')
+        resetMessage()
     } finally {
         doneLoading.value = false
         controller = null;
@@ -271,6 +287,26 @@ async function sendMsgToDeepSeek() {
         loading.value = false
     }
 }
+
+// 代码高亮避免重复
+function highBlock() {
+    const codeBlocks = sectionRef.value!.querySelectorAll('pre code') as any;
+    codeBlocks.forEach((block: any) => {
+        if (!block.dataset.highlighted) {
+            hljs.highlightElement(block);
+            block.dataset.highlighted = true
+        }
+    });
+}
+
+//请求出错后当前对话重置
+function resetMessage() {
+    const loadingItem = messageList.value.find(item => item.startLoading)
+    if (loadingItem) {
+        loadingItem.startLoading = false
+    }
+}
+
 // 自动清理部分缓存
 function clearCacheByIndex() {
     const { isFull } = checkStore()
@@ -351,7 +387,7 @@ function openAside(bol: boolean) {
     }
 }
 
-// 删除
+// 删除历史记录
 function removeHistory(origin_time: string) {
     ElMessageBox.confirm(
         '删除后，该对话将不可恢复。确认删除吗？',
@@ -394,8 +430,33 @@ async function openHistory(key: string) {
     messageList.value = getStorage()[key]
     currentActiveDialog.value = key
     showAside.value = false
+    resetMessage()
     await nextTick()
     contentRefScroll()
+}
+
+// 切换深度思考--切换模型为deepseek-reasoner
+function useDeepThink() {
+    deepthink.value = !deepthink.value
+}
+// 选取文件
+function openFileWindow() {
+    const ipt = document.createElement('input')
+    ipt.type = 'file'
+    ipt.multiple = true
+    ipt.click()
+    ipt.onchange = (e: any) => {
+        const files = e.target.files as Array<File>
+        if (!files) return
+        const validFiles = Array.from(files).filter(item => item.size <= 1024 * 1024 * 100)
+        validFiles.forEach(async (item) => {
+            const response = await openai.files.create({
+                file: item,
+                purpose: 'assistants',
+            });
+            console.log('response', response);
+        })
+    }
 }
 
 onMounted(async () => {
@@ -418,8 +479,6 @@ onBeforeUnmount(() => {
     cancelMain();
     stopWatch();
 });
-
-
 </script>
 
 <template>
@@ -478,18 +537,18 @@ onBeforeUnmount(() => {
                                 <div class="w-2/3 break-all group">
                                     <div v-html="item.answer" v-if="item.refresh == 0 || item.answer" class="text-sm">
                                     </div>
-                                    <div v-if="item.refresh > 0 && !item.answer && !item.startLoading">服务器繁忙，请稍后再试。
+                                    <div v-if="!item.answer && !item.startLoading">服务器繁忙，请稍后再试。
                                     </div>
                                     <div class="mt-2 h-7">
                                         <div class="items-center gap-x-2 hidden group-hover:flex">
                                             <img src="~/assets/icons/success.svg" v-if="item.copySuccess"
                                                 class="w-6 h-6 cursor-pointer" alt="">
                                             <img src="~/assets/icons/copy.svg"
-                                                v-if="!item.startLoading || (!item.copySuccess && !loading)"
+                                                v-if="(!item.startLoading && !item.copySuccess) || (!item.copySuccess && !loading)"
                                                 @click.stop="copy(item, 'answer')" class="w-6 h-6 cursor-pointer"
                                                 alt="">
-                                            <img v-if="!loading" @click="refresh(item)" src="~/assets/icons/refresh.svg"
-                                                class="w-6 h-6 cursor-pointer" alt="">
+                                            <img v-if="!loading && !startLoading" @click="refresh(item)"
+                                                src="~/assets/icons/refresh.svg" class="w-6 h-6 cursor-pointer" alt="">
                                         </div>
                                     </div>
                                 </div>
@@ -505,7 +564,7 @@ onBeforeUnmount(() => {
                     <div class="text-sm">我可以帮你写代码、写作等，请把你的任务交给我吧~</div>
                 </div>
                 <div v-if="userScroll && messageList.length > 0" @click.stop="contentRefScroll"
-                    class="absolute z-50 right-6 bottom-0 cursor-pointer w-8 h-8 rounded-full flex items-center justify-center dark:bg-[#404045] shadow bg-[#F3F4F6]">
+                    class="absolute z-50 right-6 bottom-0 select-none cursor-pointer w-8 h-8 rounded-full flex items-center justify-center dark:bg-[#404045] shadow bg-[#F3F4F6] hover:shadow-xl">
                     <img src="~/assets/icons/down.svg" class="w-4 h-4" alt="">
                 </div>
             </section>
@@ -520,35 +579,65 @@ onBeforeUnmount(() => {
                     placeholder="给 AI助手 - DeepSeek 发送消息"
                     class="w-full md:h-30 sm:h-24 resize-none p-2 outline-none rounded-md focus:border-[#D6DEE8] bg-transparent dark:bg-[#404045] dark:text-white text-gray-800 text-sm"
                     rows="2" v-model.trim="textarea" @keydown.enter="main"></textarea>
-                <div class="flex justify-end gap-x-2">
-                    <el-tooltip effect="dark" placement="top" v-if="!loading">
-                        <template #content>
-                            <span>清除所有对话</span>
-                        </template>
-                        <button
-                            class="md:w-10 md:h-10 w-8 h-8 flex justify-center items-center rounded-full bg-[#D6DEE8]"
-                            :class="clearLoading ? 'cursor-not-allowed' : ''" @click.stop="clearCache">
-                            <img src="~/assets/icons/clear.svg" class="w-6 h-6" alt=""
-                                :class="!clearLoading ? 'block' : 'hidden'">
-                            <img src="~/assets/icons/loading.svg" class="w-6 h-6"
-                                :class="clearLoading ? 'animate-spin' : 'hidden'" alt="">
-                        </button>
-                    </el-tooltip>
-                    <el-tooltip :visible="showPopover" effect="dark" placement="top">
-                        <template #content>
-                            <span>请输入你的问题</span>
-                        </template>
-                        <button
-                            class="md:w-10 md:h-10 w-8 h-8 flex justify-center items-center rounded-full bg-[#D6DEE8]"
-                            :class="!textarea && !loading ? 'cursor-not-allowed' : ''" @click.stop="main">
-                            <img src="~/assets/icons/send.svg" class="w-6 h-6" alt=""
-                                :class="(!loading && !doneLoading) ? 'block' : 'hidden'">
-                            <img src="~/assets/icons/loading.svg" class="w-6 h-6"
-                                :class="doneLoading ? 'animate-spin' : 'hidden'" alt="">
-                            <img src="~/assets/icons/stop.svg" @click.stop="cancelMain" class="w-6 h-6"
-                                :class="(!doneLoading && loading) ? 'block' : 'hidden'" alt="">
-                        </button>
-                    </el-tooltip>
+                <div class="flex justify-between gap-x-2">
+                    <div class="flex items-center gap-x-2">
+                        <el-tooltip effect="dark" placement="top" :disabled="deepthink">
+                            <template #content>
+                                <span>先思考后回答，解决推理问题</span>
+                            </template>
+                            <button :disabled="loading"
+                                class="w-fit md:h-10 h-8 text-[#4C4C4C] px-2 flex gap-x-1 justify-center items-center rounded-full bg-[#D6DEE8]"
+                                @click.stop="useDeepThink"
+                                :class="[{ 'cursor-not-allowed': loading }, { 'bg-[#DBEAFE] text-[#5F7FFE]': deepthink }]">
+                                <img src="~/assets/icons/deepthink.svg" class="w-6 h-6" alt="" v-if="!deepthink">
+                                <img src="~/assets/icons/deepthink-active.svg" class="w-6 h-6 text-[#5F7FFE]" alt=""
+                                    v-else>
+                                <span class="text-xs">深度思考(R1)</span>
+                            </button>
+                        </el-tooltip>
+                        <el-tooltip effect="dark" placement="top" v-if="!loading">
+                            <template #content>
+                                <span>清除所有对话</span>
+                            </template>
+                            <button
+                                class="md:w-10 md:h-10 w-8 h-8 flex justify-center items-center rounded-full bg-[#D6DEE8]"
+                                :class="clearLoading ? 'cursor-not-allowed' : ''" @click.stop="clearCache">
+                                <img src="~/assets/icons/clear.svg" class="w-6 h-6" alt=""
+                                    :class="!clearLoading ? 'block' : 'hidden'">
+                                <img src="~/assets/icons/loading.svg" class="w-6 h-6"
+                                    :class="clearLoading ? 'animate-spin' : 'hidden'" alt="">
+                            </button>
+                        </el-tooltip>
+                    </div>
+                    <div class="flex justify-between gap-x-2">
+                        <el-tooltip effect="dark" placement="top" v-if="!loading">
+                            <template #content>
+                                <div>上传附件(仅识别文字)</div>
+                                <div class="text-xs">每个100MB,支持各类文档和图片</div>
+                            </template>
+                            <button
+                                class="md:w-10 md:h-10 w-8 h-8 flex justify-center items-center rounded-full bg-[#D6DEE8]"
+                                @click.stop="openFileWindow">
+                                <img src="~/assets/icons/filelink.svg" class="w-6 h-6" alt=""
+                                    :class="!loading ? 'block' : 'hidden'">
+                            </button>
+                        </el-tooltip>
+                        <el-tooltip :visible="showPopover" effect="dark" placement="top">
+                            <template #content>
+                                <span>请输入你的问题</span>
+                            </template>
+                            <button
+                                class="md:w-10 md:h-10 w-8 h-8 flex justify-center items-center rounded-full bg-[#D6DEE8]"
+                                :class="!textarea && !loading ? 'cursor-not-allowed' : ''" @click.stop="main">
+                                <img src="~/assets/icons/send.svg" class="w-6 h-6" alt=""
+                                    :class="(!loading && !doneLoading) ? 'block' : 'hidden'">
+                                <img src="~/assets/icons/loading.svg" class="w-6 h-6"
+                                    :class="doneLoading ? 'animate-spin' : 'hidden'" alt="">
+                                <img src="~/assets/icons/stop.svg" @click.stop="cancelMain" class="w-6 h-6"
+                                    :class="(!doneLoading && loading) ? 'block' : 'hidden'" alt="">
+                            </button>
+                        </el-tooltip>
+                    </div>
                 </div>
             </footer>
             <aside v-if="showAside" class="h-screen w-full absolute left-0 top-0 overflow-hidden">
