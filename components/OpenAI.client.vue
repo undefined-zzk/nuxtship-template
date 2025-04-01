@@ -6,7 +6,6 @@ import { DynamicScroller } from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { orderBy } from 'lodash'
 import type { MessageListItem, Role, AsideDataItem } from '~/types'
-import { string } from "zod";
 const aiRef = ref<HTMLElement>()
 const { style } = useDraggable(aiRef, {
     initialValue: {
@@ -36,6 +35,7 @@ const models = ref({
 })
 const hasBalance = ref(true)
 const showAside = ref(false)
+const usePercent = ref('')
 const currentActiveDialog = ref('')
 const asideData = ref<AsideDataItem[]>([])
 const AINAME = 'AI助手Skunk-DeepSeek'
@@ -55,7 +55,6 @@ const openai = new OpenAI({
     apiKey: APIKEY,
     dangerouslyAllowBrowser: true,
 });
-// https://chat.deepseek.com/api/v0/file/upload_file
 const startLoading = computed(() => {
     return messageList.value.some(item => item.startLoading)
 })
@@ -134,12 +133,13 @@ const clearIntervalFn = () => {
 }
 
 const scrollBto = () => {
-    timer && clearInterval(timer)
+    clearIntervalFn()
     timer = setInterval(() => {
         if (userScroll.value) {
             clearIntervalFn()
             return
         }
+        console.log('fff-timer');
         contentRefScroll()
     }, 100)
 };
@@ -258,7 +258,7 @@ async function sendMsgToDeepSeek() {
         doneLoading.value = false
         let buffer = ''
         const messageItem = messageList.value.find(item => item.id === messageId)!
-        // 开启新线程避免页面卡顿
+        // 开启新线程减少页面卡顿
         const worker = new Worker(new URL('../utils/worker', import.meta.url), { type: 'module' });
         for await (const chunk of stream) {
             const chunkContent = deepthink.value ? (chunk.choices[0].delta as any)?.reasoning_content || '' : chunk.choices[0]?.delta?.content || '';
@@ -274,7 +274,6 @@ async function sendMsgToDeepSeek() {
             }
         }
     } catch (error: any) {
-        console.log(error);
         ElMessage.error('请求超时或出错，请稍后再试')
         resetMessage()
     } finally {
@@ -282,6 +281,7 @@ async function sendMsgToDeepSeek() {
         controller = null;
         clearIntervalFn()
         if (loading.value) {
+            await nextTick()
             setStorage(currentKey.value, messageList.value)
         }
         loading.value = false
@@ -289,14 +289,17 @@ async function sendMsgToDeepSeek() {
 }
 
 // 代码高亮避免重复
-function highBlock() {
+async function highBlock() {
     const codeBlocks = sectionRef.value!.querySelectorAll('pre code') as any;
     codeBlocks.forEach((block: any) => {
         if (!block.dataset.highlighted) {
             hljs.highlightElement(block);
             block.dataset.highlighted = true
         }
+        block.parentNode.insertAdjacentHTML('afterbegin', createCopyElement())
     });
+    await nextTick()
+    addLisEventCopyText()
 }
 
 //请求出错后当前对话重置
@@ -309,7 +312,8 @@ function resetMessage() {
 
 // 自动清理部分缓存
 function clearCacheByIndex() {
-    const { isFull } = checkStore()
+    const { isFull, percent } = checkStore()
+    usePercent.value = percent + '%'
     if (isFull) {
         removeStorage(currentKey.value, 10)
         messageList.value = getStorage()[currentKey.value]
@@ -403,7 +407,6 @@ function removeHistory(origin_time: string) {
                 item.titles = item.titles.filter(k => k.origin_time !== origin_time)
                 return item
             })
-            console.log('origin_time', origin_time);
             removeStorage(origin_time, 0)
             if (origin_time === currentKey.value) {
                 // 删除的是当前的对话
@@ -432,6 +435,7 @@ async function openHistory(key: string) {
     showAside.value = false
     resetMessage()
     await nextTick()
+    highBlock()
     contentRefScroll()
 }
 
@@ -441,22 +445,49 @@ function useDeepThink() {
 }
 // 选取文件
 function openFileWindow() {
-    const ipt = document.createElement('input')
-    ipt.type = 'file'
-    ipt.multiple = true
-    ipt.click()
-    ipt.onchange = (e: any) => {
-        const files = e.target.files as Array<File>
-        if (!files) return
-        const validFiles = Array.from(files).filter(item => item.size <= 1024 * 1024 * 100)
-        validFiles.forEach(async (item) => {
-            const response = await openai.files.create({
-                file: item,
-                purpose: 'assistants',
-            });
-            console.log('response', response);
-        })
-    }
+    return ElMessage.warning('功能开发中')
+    // const ipt = document.createElement('input')
+    // ipt.type = 'file'
+    // ipt.multiple = true
+    // ipt.click()
+    // ipt.onchange = (e: any) => {
+    //     const files = e.target.files as Array<File>
+    //     if (!files) return
+    //     const validFiles = Array.from(files).filter(item => item.size <= 1024 * 1024 * 100)
+    //     const formData = new FormData();
+    //     validFiles.forEach(async (item) => {
+    //         formData.append('file', item);
+    //         const { data, error } = await useFetch('/api/upload', {
+    //             method: 'POST',
+    //             body: formData,
+    //         });
+    //         console.log('data', data);
+    //     })
+    // }
+}
+
+// 创建复制元素
+function createCopyElement() {
+    const copyEle = `<div class="h-6 shadow-lg w-full bg-[#50505A] absolute top-0 left-0 right-0 z-10 flex items-center justify-end px-3"><span class="text-white text-xs cursor-copy copy-text">复制代码</span></div>`
+    return copyEle
+}
+
+// 给复制元素添加点击事件
+function addLisEventCopyText() {
+    const copyTexts = document.querySelectorAll('.copy-text')
+    copyTexts.forEach(item => {
+        item.addEventListener('click', () => copyCode(item))
+    })
+}
+// 复制code中的代码
+async function copyCode(el: Element) {
+    if (el.innerHTML === '复制成功') return
+    const codeEl = el.parentNode?.parentNode?.querySelector('code')
+    await copyToClipboard(codeEl?.innerHTML as string)
+    el.innerHTML = '复制成功'
+    setTimeout(() => {
+        el.innerHTML = '复制代码'
+    }, 1000)
 }
 
 onMounted(async () => {
@@ -597,7 +628,8 @@ onBeforeUnmount(() => {
                         </el-tooltip>
                         <el-tooltip effect="dark" placement="top" v-if="!loading">
                             <template #content>
-                                <span>清除所有对话</span>
+                                <div>清除所有对话</div>
+                                <div class="text-xs text-[#D6DEE8]">已使用内存:{{ usePercent }}</div>
                             </template>
                             <button
                                 class="md:w-10 md:h-10 w-8 h-8 flex justify-center items-center rounded-full bg-[#D6DEE8]"
@@ -678,9 +710,41 @@ onBeforeUnmount(() => {
 
 <style>
 pre code {
+    position: relative;
     border-radius: 8px !important;
     margin: 10px 0;
     background-color: #181D28 !important;
     color: #fff !important;
+    padding-top: 30px !important;
+}
+
+pre {
+    position: relative;
+    overflow: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 18px 0;
+}
+
+ul,
+ol {
+    margin: 13px 0;
+    padding-left: 30px !important;
+}
+
+ul li,
+ol li {
+    margin-top: 4px;
+    list-style: disc !important;
+}
+
+p {
+    margin: 13px 0;
 }
 </style>
