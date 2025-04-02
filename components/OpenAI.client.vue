@@ -139,7 +139,6 @@ const scrollBto = () => {
             clearIntervalFn()
             return
         }
-        console.log('fff-timer');
         contentRefScroll()
     }, 100)
 };
@@ -212,8 +211,6 @@ async function main(e: any) {
     }
     if (loading.value || startLoading.value) return;
     if (!hasBalance.value) return errTipMsg()
-    console.log('isToday', isToday());
-
     if (!isToday()) {
         currentKey.value = getDateTime().fulltime
         setDialogKey(currentKey.value)
@@ -498,14 +495,16 @@ onMounted(async () => {
     setDialogKey(currentKey.value)
     try {
         const cacheData = getStorage()
-        if (!cacheData[currentKey.value]) {
+        if (!cacheData[currentKey.value] || !Array.isArray(cacheData[currentKey.value])) {
             cacheData[currentKey.value] = []
         }
-        messageList.value = cacheData[currentKey.value].map(item => ({ ...item, startLoading: false, copySuccess: false }))
+
+        messageList.value = (cacheData[currentKey.value] || []).map(item => ({ ...item, startLoading: false, copySuccess: false }))
         await nextTick()
         hljs.highlightAll()
     } catch (e) {
         console.log(e);
+        messageList.value = []
     }
 })
 
@@ -536,7 +535,7 @@ onBeforeUnmount(() => {
                         alt="">
                 </div>
             </header>
-            <section ref="sectionRef" class="w-full relative flex-1 rounded-md p-2 overflow-x-hidden scrollbar"
+            <section ref="sectionRef" class="w-full relative flex-1 rounded-md sm:p-0 p-2 overflow-x-hidden scrollbar"
                 :class="messageList.length == 0 ? 'flex flex-col items-center justify-center' : ''">
                 <DynamicScroller ref="contentRef" :buffer="1000" :items="messageList" :min-item-size="54"
                     class="h-full scrollbar" v-show="messageList.length > 0" @scroll.passive="daynamicScrollerScroll">
@@ -568,7 +567,7 @@ onBeforeUnmount(() => {
                                 </div>
                                 <img src="~/assets/icons/loading.svg" class="w-8 h-8 mt-1" alt=""
                                     :class="item.startLoading ? 'animate-spin' : 'hidden'">
-                                <div class="w-2/3 break-all group">
+                                <div class="w-2/3 sm:w-full break-all group">
                                     <div v-html="item.answer" v-if="item.refresh == 0 || item.answer" class="text-sm">
                                     </div>
                                     <div v-if="!item.answer && !item.startLoading">服务器繁忙，请稍后再试。

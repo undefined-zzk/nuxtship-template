@@ -115,7 +115,11 @@ export const setStorage = (currentKey: string, value: MessageListItem[]) => {
 export const getStorage = (): StoreObj => {
   const obj: StoreObj = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
   for (const key in obj) {
-    obj[key] = uncompressedArr(obj[key]);
+    if (!Array.isArray(obj[key])) {
+      obj[key] = [];
+    } else {
+      obj[key] = uncompressedArr(obj[key]);
+    }
   }
   return obj;
 };
