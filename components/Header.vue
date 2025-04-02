@@ -13,6 +13,15 @@ const changeLang = () => {
     setLocale(lang)
 }
 
+// 监听用户网络状态
+const { isOnline } = useOnline()
+watch(isOnline, () => {
+    if (!isOnline.value) {
+        ElMessage.error('您的网络出小差了!')
+    } else {
+        ElMessage.success('网络已连接!')
+    }
+})
 
 </script>
 

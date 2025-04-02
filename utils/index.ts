@@ -56,23 +56,39 @@ export const isIE = () => {
 export const compressedArr = (arr: MessageListItem[]) => {
   return arr.map((item) => ({
     ...item,
+    lzstring: item.answer.length > 500,
     answer:
-      isFirefox() || isIE()
-        ? LZString.compressToUTF16(item.answer)
-        : LZString.compress(item.answer),
+      item.answer.length > 500
+        ? isFirefox() || isIE()
+          ? LZString.compressToUTF16(item.answer)
+          : LZString.compress(item.answer)
+        : item.answer,
   }));
 };
 /**
  * 恢复压缩
  */
 export const uncompressedArr = (arr: MessageListItem[]) => {
-  return arr.map((item) => ({
-    ...item,
-    answer:
-      isFirefox() || isIE()
-        ? LZString.decompressFromUTF16(item.answer)
-        : LZString.decompress(item.answer),
-  }));
+  return arr.map((item) => {
+    let decompressed = item.answer;
+    if (item.lzstring) {
+      try {
+        decompressed =
+          isFirefox() || isIE()
+            ? LZString.decompressFromUTF16(item.answer)
+            : LZString.decompress(item.answer);
+        // 如果解压失败则保持原样
+        if (decompressed === null) decompressed = item.answer;
+      } catch (e) {
+        console.log("err", e);
+        decompressed = item.answer;
+      }
+    }
+    return {
+      ...item,
+      answer: decompressed,
+    };
+  });
 };
 
 /**
@@ -83,6 +99,10 @@ export const uncompressedArr = (arr: MessageListItem[]) => {
 const STORAGE_KEY = "skunk";
 export const setStorage = (currentKey: string, value: MessageListItem[]) => {
   const obj = getStorage();
+  for (const key in obj) {
+    if (key === currentKey) continue;
+    obj[key] = compressedArr(obj[key]);
+  }
   obj[currentKey] = compressedArr(value);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
 };
@@ -95,9 +115,7 @@ export const setStorage = (currentKey: string, value: MessageListItem[]) => {
 export const getStorage = (): StoreObj => {
   const obj: StoreObj = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
   for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      obj[key] = uncompressedArr(obj[key]);
-    }
+    obj[key] = uncompressedArr(obj[key]);
   }
   return obj;
 };

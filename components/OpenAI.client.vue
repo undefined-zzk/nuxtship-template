@@ -212,6 +212,8 @@ async function main(e: any) {
     }
     if (loading.value || startLoading.value) return;
     if (!hasBalance.value) return errTipMsg()
+    console.log('isToday', isToday());
+
     if (!isToday()) {
         currentKey.value = getDateTime().fulltime
         setDialogKey(currentKey.value)
@@ -222,11 +224,12 @@ async function sendMsgToDeepSeek() {
     try {
         clearCacheByIndex()
         await nextTick()
+        currentKey.value = getDialogKey()
         userScroll.value = false
         controller = new AbortController();
         loading.value = true;
         const messageId = getNanoid()
-        messageList.value.push({ role: role.value, content: textarea.value || tempTextarea.value, name: '', id: messageId, answer: '', startLoading: true, copySuccess: false, refresh: tempRefresh.value || 0, createtime: Date.now() });
+        messageList.value.push({ role: role.value, content: textarea.value || tempTextarea.value, name: '', id: messageId, answer: '', lzstring: false, startLoading: true, copySuccess: false, refresh: tempRefresh.value || 0, createtime: Date.now() });
         tempRefresh.value = 0
         setStorage(currentKey.value, messageList.value)
         doneLoading.value = true
@@ -290,7 +293,7 @@ async function sendMsgToDeepSeek() {
 
 // 代码高亮避免重复
 async function highBlock() {
-    const codeBlocks = sectionRef.value!.querySelectorAll('pre code') as any;
+    const codeBlocks = sectionRef.value?.querySelectorAll('pre code') as any;
     codeBlocks.forEach((block: any) => {
         if (!block.dataset.highlighted) {
             hljs.highlightElement(block);
@@ -428,8 +431,8 @@ async function openHistory(key: string) {
     if (loading.value) {
         cancelMain()
     }
-    setDialogKey(key)
     currentKey.value = key
+    setDialogKey(key)
     messageList.value = getStorage()[key]
     currentActiveDialog.value = key
     showAside.value = false
