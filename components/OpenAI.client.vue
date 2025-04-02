@@ -522,7 +522,7 @@ onBeforeUnmount(() => {
             <img src="~/assets/icons/ai-assisant.svg" alt="" class="w-6 h-6">
         </div>
         <div v-show="showAiModal"
-            class="fixed motion-safe:animate-drawer z-10 right-0 bottom-0 bg-slate-600 dark:bg-[#292A2D] h-screen md:w-2/3 w-full p-4 flex flex-col gap-4">
+            class="fixed motion-safe:animate-drawer z-10 right-0 bottom-0 bg-slate-600 dark:bg-[#292A2D] h-screen md:w-2/3 w-full p-3 flex flex-col gap-4">
             <CssLoading v-if="balLoading"></CssLoading>
             <header class="text-center select-none h-10 leading-10 flex items-center justify-between gap-2">
                 <div @click.stop="openAside(true)">
