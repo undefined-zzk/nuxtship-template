@@ -535,7 +535,8 @@ onBeforeUnmount(() => {
                         alt="">
                 </div>
             </header>
-            <section ref="sectionRef" class="w-full relative flex-1 rounded-md sm:p-0 p-2 overflow-x-hidden scrollbar"
+            <section ref="sectionRef"
+                class="w-full relative flex-1 rounded-md sm:p-0 md:p-2 overflow-x-hidden scrollbar"
                 :class="messageList.length == 0 ? 'flex flex-col items-center justify-center' : ''">
                 <DynamicScroller ref="contentRef" :buffer="1000" :items="messageList" :min-item-size="54"
                     class="h-full scrollbar" v-show="messageList.length > 0" @scroll.passive="daynamicScrollerScroll">
@@ -562,12 +563,12 @@ onBeforeUnmount(() => {
                             </div>
                             <div class="flex items-start gap-x-3 text-white">
                                 <div
-                                    class="w-10 h-10 border-2 overflow-hidden flex items-center justify-center border-white rounded-full">
+                                    class="w-10 flex-shrink-0 h-10 border-2 overflow-hidden flex items-center justify-center border-white rounded-full">
                                     <img src="~/assets/icons/deepseek.svg" alt="" class="w-6 h-6">
                                 </div>
                                 <img src="~/assets/icons/loading.svg" class="w-8 h-8 mt-1" alt=""
                                     :class="item.startLoading ? 'animate-spin' : 'hidden'">
-                                <div class="w-2/3 sm:w-full break-all group">
+                                <div class="md:w-2/3 sm:w-full break-all group">
                                     <div v-html="item.answer" v-if="item.refresh == 0 || item.answer" class="text-sm">
                                     </div>
                                     <div v-if="!item.answer && !item.startLoading">服务器繁忙，请稍后再试。
