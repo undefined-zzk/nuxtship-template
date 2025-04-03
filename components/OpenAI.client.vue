@@ -90,14 +90,12 @@ watch(showAiModal, async () => {
 
 watch(style, () => {
     isMove.value = true
-    scrollPd(true)
 })
 
 const mouseUp = () => {
     moveTimer && clearTimeout(moveTimer)
     moveTimer = setTimeout(() => {
         isMove.value = false
-        scrollPd(false)
         clearTimeout(moveTimer)
     }, 300)
 }
@@ -183,14 +181,17 @@ const clearCache = () => {
 
         })
 }
+function isMobileDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
 
 function scrollPd(hidden: boolean) {
     if (hidden) {
         document.body.style.overflow = 'hidden'
-        document.body.style.paddingRight = '15px'
+        document.body.style.paddingRight = isMobileDevice() ? '0px' : '15px'
     } else {
         document.body.style.overflow = 'auto'
-        document.body.style.paddingRight = '0'
+        document.body.style.paddingRight = '0px'
     }
 }
 
@@ -528,7 +529,7 @@ onBeforeUnmount(() => {
     <div>
         <div ref="aiRef" @mouseup="mouseUp" @touchend="mouseUp" :style="style" v-if="!showAiModal"
             @click.stop="showModal"
-            class="fixed text-xs cursor-pointer z-50 flex justify-center items-center w-12 h-12 lg:w-14 lg:h-14 text-color bg-slate-100 shadow-lg dark:bg-[#292A2D] rounded-full">
+            class="drag-ele fixed text-xs cursor-pointer z-50 flex justify-center items-center w-12 h-12 lg:w-14 lg:h-14 text-color bg-slate-100 shadow-lg dark:bg-[#292A2D] rounded-full">
             <img src="~/assets/icons/ai-assisant.svg" alt="" class="w-6 h-6 select-none">
             <div class="w-7 h-7 absolute opacity-0"></div>
         </div>
@@ -768,5 +769,15 @@ p {
 
 .safe-area-top {
     padding-top: env(safe-area-inset-top);
+}
+
+.drag-ele {
+    /* 拖拽优化 */
+    -webkit-tap-highlight-color: transparent;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 </style>
