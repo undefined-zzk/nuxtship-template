@@ -64,8 +64,7 @@ watch(showAiModal, async () => {
         clearCacheByIndex()
         await nextTick()
         try {
-            document.body.style.overflow = 'hidden'
-            document.body.style.paddingRight = '15px'
+            scrollPd(true)
             balLoading.value = true
             const balance = await $fetch<{ is_available: boolean }>('https://api.deepseek.com/user/balance', {
                 headers: {
@@ -85,21 +84,22 @@ watch(showAiModal, async () => {
             textareaRef.value?.focus()
         }
     } else {
-        document.body.style.overflow = 'auto'
-        document.body.style.paddingRight = '0'
+        scrollPd(false)
     }
 })
 
 watch(style, () => {
     isMove.value = true
+    scrollPd(true)
 })
 
 const mouseUp = () => {
     moveTimer && clearTimeout(moveTimer)
     moveTimer = setTimeout(() => {
         isMove.value = false
+        scrollPd(false)
         clearTimeout(moveTimer)
-    }, 500)
+    }, 300)
 }
 
 const stopWatch = watch(textarea, () => {
@@ -182,6 +182,16 @@ const clearCache = () => {
         .catch(() => {
 
         })
+}
+
+function scrollPd(hidden: boolean) {
+    if (hidden) {
+        document.body.style.overflow = 'hidden'
+        document.body.style.paddingRight = '15px'
+    } else {
+        document.body.style.overflow = 'auto'
+        document.body.style.paddingRight = '0'
+    }
 }
 
 function contentRefScroll() {
@@ -516,12 +526,14 @@ onBeforeUnmount(() => {
 
 <template>
     <div>
-        <div ref="aiRef" @mouseup="mouseUp" :style="style" v-if="!showAiModal" @click.stop="showModal"
+        <div ref="aiRef" @mouseup="mouseUp" @touchend="mouseUp" :style="style" v-if="!showAiModal"
+            @click.stop="showModal"
             class="fixed text-xs cursor-pointer z-50 flex justify-center items-center w-12 h-12 lg:w-14 lg:h-14 text-color bg-slate-100 shadow-lg dark:bg-[#292A2D] rounded-full">
-            <img src="~/assets/icons/ai-assisant.svg" alt="" class="w-6 h-6">
+            <img src="~/assets/icons/ai-assisant.svg" alt="" class="w-6 h-6 select-none">
+            <div class="w-7 h-7 absolute opacity-0"></div>
         </div>
         <div v-show="showAiModal"
-            class="fixed motion-safe:animate-drawer z-10 right-0 bottom-0 bg-slate-600 dark:bg-[#292A2D] h-screen md:w-2/3 w-full p-3 flex flex-col gap-4">
+            class="fixed safe-area-top motion-safe:animate-drawer z-10 right-0 bottom-0 bg-slate-600 dark:bg-[#292A2D] h-screen md:w-2/3 w-full p-3 flex flex-col gap-4">
             <CssLoading v-if="balLoading"></CssLoading>
             <header class="text-center select-none h-10 leading-10 flex items-center justify-between gap-2">
                 <div @click.stop="openAside(true)" class="flex items-center gap-x-2">
@@ -752,5 +764,9 @@ ol li {
 
 p {
     margin: 13px 0;
+}
+
+.safe-area-top {
+    padding-top: env(safe-area-inset-top);
 }
 </style>
