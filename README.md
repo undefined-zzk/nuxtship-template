@@ -74,4 +74,4 @@ bun run preview
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
 
-![图片描述](./docs/images/weipay.png)
+![微信支付](/docs/images/weipay.png)
