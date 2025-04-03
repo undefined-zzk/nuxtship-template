@@ -524,13 +524,16 @@ onBeforeUnmount(() => {
             class="fixed motion-safe:animate-drawer z-10 right-0 bottom-0 bg-slate-600 dark:bg-[#292A2D] h-screen md:w-2/3 w-full p-3 flex flex-col gap-4">
             <CssLoading v-if="balLoading"></CssLoading>
             <header class="text-center select-none h-10 leading-10 flex items-center justify-between gap-2">
-                <div @click.stop="openAside(true)">
+                <div @click.stop="openAside(true)" class="flex items-center gap-x-2">
                     <img src="~/assets/icons/hamburger.svg" class="w-4 h-4 cursor-pointer" alt="">
+                    <div class="w-4 h-4"></div>
                 </div>
                 <div class="flex items-center gap-2">
                     <span class="text-white">{{ AINAME }}</span>
                 </div>
-                <div class="">
+                <div class="flex items-center gap-x-2">
+                    <img src="~/assets/icons/new-dialogue.svg" class="w-4 h-4 cursor-pointer md:hidden"
+                        @click="openNewChat" alt="">
                     <img src="~/assets/icons/close.svg" class="w-4 h-4 cursor-pointer" @click="showAiModal = false"
                         alt="">
                 </div>
@@ -568,7 +571,7 @@ onBeforeUnmount(() => {
                                 </div>
                                 <img src="~/assets/icons/loading.svg" class="w-8 h-8 mt-1" alt=""
                                     :class="item.startLoading ? 'animate-spin' : 'hidden'">
-                                <div class="md:w-2/3 sm:w-full break-all group">
+                                <div class="w-4/5 break-all group">
                                     <div v-html="item.answer" v-if="item.refresh == 0 || item.answer" class="text-sm">
                                     </div>
                                     <div v-if="!item.answer && !item.startLoading">服务器繁忙，请稍后再试。
@@ -602,8 +605,8 @@ onBeforeUnmount(() => {
                     <img src="~/assets/icons/down.svg" class="w-4 h-4" alt="">
                 </div>
             </section>
-            <div class="flex items-center justify-center h-10" v-if="messageList.length > 0">
-                <div @click="openNewChat"
+            <div class="md:flex items-center justify-center h-10 hidden" v-if="messageList.length > 0">
+                <div @click.stop="openNewChat"
                     class="text-[#646BFE] bg-[#DBEAFE] text-sm cursor-pointer flex items-center justify-center gap-x-2 py-1 px-2 rounded-lg">
                     <img src="~/assets/icons/modal.svg" class="w-4 h-4" alt=""><span>开启新的对话</span>
                 </div>
