@@ -38,7 +38,7 @@ const showAside = ref(false)
 const usePercent = ref('')
 const currentActiveDialog = ref('')
 const asideData = ref<AsideDataItem[]>([])
-const AINAME = 'AI助手Skunk-DeepSeek'
+const AINAME = 'AI助手 Skunk-DeepSeek'
 const currentKey = ref()
 const prevScrollTop = ref(0)
 const currentScrollTop = ref(0)
@@ -626,7 +626,7 @@ onBeforeUnmount(() => {
             </div>
             <footer class="text-center max-h-[300px] sm:min-h-[160px] bg-[#F3F4F6] dark:bg-[#404045] p-3 rounded-md">
                 <textarea ref="textareaRef" maxlength="50000" :readonly="loading || balLoading"
-                    placeholder="给 AI助手 - DeepSeek 发送消息"
+                    placeholder="给 AI助手 Shunk-DeepSeek 发送消息"
                     class="w-full md:h-30 sm:h-24 resize-none p-2 outline-none rounded-md focus:border-[#D6DEE8] bg-transparent dark:bg-[#404045] dark:text-white text-gray-800 text-sm"
                     rows="2" v-model.trim="textarea" @keydown.enter="main"></textarea>
                 <div class="flex justify-between gap-x-2">
