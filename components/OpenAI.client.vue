@@ -4,7 +4,7 @@ import hljs from 'highlight.js';
 import 'highlight.js/styles/github-dark.css';
 import { DynamicScroller } from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-import { orderBy } from 'lodash'
+import { orderBy, debounce } from 'lodash'
 import type { MessageListItem, Role, AsideDataItem } from '~/types'
 const aiRef = ref<HTMLElement>()
 const { style } = useDraggable(aiRef, {
@@ -33,6 +33,7 @@ const models = ref({
     'chat': 'deepseek-chat',
     'reasoner': 'deepseek-reasoner'
 })
+const worker = ref()
 const hasBalance = ref(true)
 const showAside = ref(false)
 const usePercent = ref('')
@@ -62,7 +63,8 @@ const startLoading = computed(() => {
 watch(showAiModal, async () => {
     if (showAiModal.value) {
         clearCacheByIndex()
-        await nextTick()
+        // await nextTick()
+        highBlock()
         try {
             scrollPd(true)
             balLoading.value = true
@@ -78,7 +80,6 @@ watch(showAiModal, async () => {
             }
         } catch (e) {
         } finally {
-            highBlock()
             contentRefScroll()
             balLoading.value = false
             textareaRef.value?.focus()
@@ -270,24 +271,27 @@ async function sendMsgToDeepSeek() {
         let buffer = ''
         const messageItem = messageList.value.find(item => item.id === messageId)!
         // 开启新线程减少页面卡顿
-        const worker = new Worker(new URL('../utils/worker', import.meta.url), { type: 'module' });
+        worker.value = new Worker(new URL('../utils/worker', import.meta.url), { type: 'module' });
+        worker.value.onmessage = async (event: any) => {
+            messageItem.answer = event.data;
+            messageItem.startLoading = false
+            requestAnimationFrame(() => {
+                highBlock();
+            });
+        }
+        const debouncedPost = debounce((data) => worker.value.postMessage(data), 20);
         for await (const chunk of stream) {
             const chunkContent = deepthink.value ? (chunk.choices[0].delta as any)?.reasoning_content || '' : chunk.choices[0]?.delta?.content || '';
             if (chunkContent) {
                 buffer += chunkContent
-                worker.postMessage({ buffer });
-                worker.onmessage = async (event) => {
-                    messageItem.answer = event.data;
-                    messageItem.startLoading = false
-                    await nextTick()
-                    highBlock()
-                }
+                debouncedPost({ buffer });
             }
         }
     } catch (error: any) {
         ElMessage.error('请求超时或出错，请稍后再试')
         resetMessage()
     } finally {
+        worker.value.terminate();
         doneLoading.value = false
         controller = null;
         clearIntervalFn()
@@ -479,7 +483,7 @@ function openFileWindow() {
 
 // 创建复制元素
 function createCopyElement() {
-    const copyEle = `<div class="h-6 shadow-lg w-full bg-[#50505A] absolute top-0 left-0 right-0 z-10 flex items-center justify-end px-3"><span class="text-white text-xs cursor-copy copy-text">复制代码</span></div>`
+    const copyEle = `<div class="h-6 shadow-lg w-full bg-[#50505A] absolute top-0 left-0 right-0 z-10 flex items-center justify-end px-3"><span class="text-white text-xs cursor-copy copy-text">复制</span></div>`
     return copyEle
 }
 
@@ -497,7 +501,7 @@ async function copyCode(el: Element) {
     await copyToClipboard(codeEl?.innerHTML as string)
     el.innerHTML = '复制成功'
     setTimeout(() => {
-        el.innerHTML = '复制代码'
+        el.innerHTML = '复制'
     }, 1000)
 }
 
