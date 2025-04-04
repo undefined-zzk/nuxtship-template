@@ -60,7 +60,7 @@ const { locale } = useI18n()
     </Head>
     <top zhtitle="关于" title="About" zhdesc="我们是一个充满激情的小团队。" desc="We are a small passionate team."></top>
     <div>
-      <div class="font-bold text-3xl mb-5">{{ $t('about.title') }}</div>
+      <div class="font-bold text-3xl text-color mb-5">{{ $t('about.title') }}</div>
       <div class="text-xl text-gray-400">{{ $t('about.subtitle') }}</div>
     </div>
     <div class="md:flex gap-10 mt-10 justify-center">

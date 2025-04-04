@@ -19,15 +19,15 @@ useSeoMeta({
         <top zhtitle="接触" title="Contact" zhdesc="我来帮忙。" desc="I am here to help."></top>
         <div class="md:flex gap-10 md:px-32">
             <div class="flex-1 md:mb-0 mb-5">
-                <div class="text-2xl">{{ $t('contact.creator') }}</div>
+                <div class="text-2xl text-color">{{ $t('contact.creator') }}</div>
                 <div class="mt-3 mb-5 text-xl text-gray-400">
                     {{ $t('contact.tip') }}
                 </div>
-                <div class="flex items-center gap-4 mb-4">
+                <div class="flex items-center gap-4 mb-4 text-color">
                     <Icon name="uil:registered"></Icon>
                     <span>{{ $t('contact.one') }}</span>
                 </div>
-                <div class="flex items-center gap-4">
+                <div class="flex items-center gap-4 text-color">
                     <Icon name="uil:envelope-minus"></Icon>
                     <span>{{ $t('contact.emial') }}</span>
                 </div>
