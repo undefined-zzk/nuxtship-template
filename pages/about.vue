@@ -68,7 +68,10 @@ const { locale } = useI18n()
         <div class="w-[272px] h-[272px] mb-5 hover:shadow-xl rounded-sm overflow-hidden">
           <img :src="item.avatar.src" alt="team(团队)" class="w-full h-full object-cover">
         </div>
-        <div class="text-center text-xl">{{ $t('about.teamname', { name: locale === 'en' ? item.name : item.zhname }) }}
+        <div class="text-center text-xl text-color">{{ $t('about.teamname', {
+          name: locale === 'en' ? item.name :
+            item.zhname
+        }) }}
         </div>
         <div class="text-center text-gray-400">{{ $t('about.teamtitle', {
           title: locale === 'en' ? item.title :
