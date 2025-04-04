@@ -530,7 +530,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div>
+    <div class="fixed bottom-0 right-0 overflow-hidden top-0 left-0 w-full h-full">
         <div ref="aiRef" @mouseup="mouseUp" @touchend="mouseUp" :style="style" v-if="!showAiModal"
             @click.stop="showModal"
             class="drag-ele fixed text-xs cursor-pointer z-50 flex justify-center items-center w-12 h-12 lg:w-14 lg:h-14 text-color bg-slate-100 shadow-lg dark:bg-[#292A2D] rounded-full">
@@ -538,9 +538,9 @@ onBeforeUnmount(() => {
             <div class="w-7 h-7 absolute opacity-0"></div>
         </div>
         <div v-show="showAiModal"
-            class="fixed safe-area-top motion-safe:animate-drawer z-10 right-0 bottom-0 bg-slate-600 dark:bg-[#292A2D] h-screen md:w-2/3 w-full p-3 flex flex-col gap-4">
+            class="sticky motion-safe:animate-opacity md:translate-x-1/2 z-10 right-0 bottom-0 bg-slate-600 dark:bg-[#292A2D] h-screen md:w-2/3 w-full p-3">
             <CssLoading v-if="balLoading"></CssLoading>
-            <header class="text-center select-none h-10 leading-10 flex items-center justify-between gap-2">
+            <header class="text-center select-none h-10 flex items-center justify-between gap-2">
                 <div @click.stop="openAside(true)" class="flex items-center gap-x-2">
                     <img src="~/assets/icons/hamburger.svg" class="w-4 h-4 cursor-pointer" alt="">
                     <div class="w-4 h-4"></div>
@@ -556,7 +556,7 @@ onBeforeUnmount(() => {
                 </div>
             </header>
             <section ref="sectionRef"
-                class="w-full relative flex-1 rounded-md sm:p-0 md:p-2 overflow-x-hidden scrollbar"
+                class="w-full relative h-modalH rounded-md sm:p-0 md:p-2 overflow-x-hidden scrollbar"
                 :class="messageList.length == 0 ? 'flex flex-col items-center justify-center' : ''">
                 <DynamicScroller ref="contentRef" :buffer="1000" :items="messageList" :min-item-size="54"
                     class="h-full scrollbar" v-show="messageList.length > 0" @scroll.passive="daynamicScrollerScroll">
@@ -628,7 +628,9 @@ onBeforeUnmount(() => {
                     <img src="~/assets/icons/modal.svg" class="w-4 h-4" alt=""><span>开启新的对话</span>
                 </div>
             </div>
-            <footer class="text-center max-h-[300px] sm:min-h-[160px] bg-[#F3F4F6] dark:bg-[#404045] p-3 rounded-md">
+            <!-- F3F4F6 -->
+            <footer
+                class="modal-footer fixed bottom-0 left-1/2 -translate-x-1/2 w-[90%] text-center sm:h-[160px] bg-[#F3F4F6] dark:bg-[#404045] p-3 rounded-md">
                 <textarea ref="textareaRef" maxlength="50000" :readonly="loading || balLoading"
                     placeholder="给 AI助手 Shunk-DeepSeek 发送消息"
                     class="w-full md:h-30 sm:h-24 resize-none p-2 outline-none rounded-md focus:border-[#D6DEE8] bg-transparent dark:bg-[#404045] dark:text-white text-gray-800 text-sm"
@@ -771,9 +773,6 @@ p {
     margin: 13px 0;
 }
 
-.safe-area-top {
-    padding-top: env(safe-area-inset-top);
-}
 
 .drag-ele {
     /* 拖拽优化 */
@@ -783,5 +782,9 @@ p {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
+}
+
+.modal-footer {
+    bottom: calc(10px + env(safe-area-inset-bottom));
 }
 </style>

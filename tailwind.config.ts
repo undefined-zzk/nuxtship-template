@@ -18,13 +18,16 @@ export default <Partial<Config>>{
         sans: ['Roboto', 'Roboto fallback', ...fontFamily.sans],
       },
       animation: {
-        drawer: 'drawerT 0.4s ease-in-out',
+        opacity: 'opacityT 0.4s ease-in-out',
         drawerleft: 'drawerL 0.4s ease-in-out',
       },
+      height: {
+        modalH: 'calc(100vh - 266px)',
+      },
       keyframes: {
-        drawerT: {
-          '0%': { transform: 'translateX(100%)' },
-          '100%': { transform: 'translateX(0)' },
+        opacityT: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
         },
         drawerL: {
           '0%': { transform: 'translateX(-100%)' },
