@@ -530,7 +530,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="fixed bottom-0 right-0 overflow-hidden top-0 left-0 w-full h-full">
+    <div :class="showAiModal ? `fixed bottom-0 right-0 overflow-hidden top-0 left-0 w-full h-full` : ''">
         <div ref="aiRef" @mouseup="mouseUp" @touchend="mouseUp" :style="style" v-if="!showAiModal"
             @click.stop="showModal"
             class="drag-ele fixed text-xs cursor-pointer z-50 flex justify-center items-center w-12 h-12 lg:w-14 lg:h-14 text-color bg-slate-100 shadow-lg dark:bg-[#292A2D] rounded-full">
