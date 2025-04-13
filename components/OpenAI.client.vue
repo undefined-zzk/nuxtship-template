@@ -79,6 +79,11 @@ watch(showAiModal, async () => {
                 errTipMsg()
             }
         } catch (e) {
+            if (typeof e === 'string') {
+                ElMessage.error(e);
+            } else if (e instanceof Error) {
+                ElMessage.error(e.message);
+            }
         } finally {
             contentRefScroll()
             balLoading.value = false
@@ -136,9 +141,9 @@ const scrollBto = () => {
     timer = setInterval(() => {
         if (userScroll.value) {
             clearIntervalFn()
-            return
+        } else {
+            contentRefScroll()
         }
-        contentRefScroll()
     }, 100)
 };
 
@@ -197,18 +202,20 @@ function scrollPd(hidden: boolean) {
 }
 
 function contentRefScroll() {
-    if (contentRef.value) {
+    if (contentRef.value && !userScroll.value) {
         contentRef.value.scrollToBottom();
     }
 }
 
 function daynamicScrollerScroll(e: any) {
-    if (userScroll.value) return
+    if (userScroll.value) {
+        return
+    }
     currentScrollTop.value = e.target.scrollTop
     if (currentScrollTop.value < prevScrollTop.value) {
         userScroll.value = true
     }
-    prevScrollTop.value = currentScrollTop.value
+    prevScrollTop.value = currentScrollTop.value - 30
 }
 
 function errTipMsg(msg: string = '余额不足,无法继续对话,给作者打赏点吧!😭') {
@@ -235,6 +242,8 @@ async function sendMsgToDeepSeek() {
         await nextTick()
         currentKey.value = getDialogKey()
         userScroll.value = false
+        prevScrollTop.value = 0
+        currentScrollTop.value = 0
         controller = new AbortController();
         loading.value = true;
         const messageId = getNanoid()
@@ -287,11 +296,15 @@ async function sendMsgToDeepSeek() {
                 debouncedPost({ buffer });
             }
         }
-    } catch (error: any) {
-        ElMessage.error('请求超时或出错，请稍后再试')
+    } catch (e) {
+        if (typeof e === 'string') {
+            ElMessage.error(e);
+        } else if (e instanceof Error) {
+            ElMessage.error(e.message);
+        }
         resetMessage()
     } finally {
-        worker.value.terminate();
+        worker.value?.terminate();
         doneLoading.value = false
         controller = null;
         clearIntervalFn()

@@ -1,3 +1,13 @@
+<!--
+ * @Author: undefined 2143511430@qq.com
+ * @Date: 2025-04-13 18:38:24
+ * @LastEditors: undefined 2143511430@qq.com
+ * @LastEditTime: 2025-04-13 19:06:10
+ * @FilePath: \nuxtship-template-ai\components\CssLoading.client.vue
+ * @Description: 
+ * 
+ * Copyright (c) 2025 by ${git_name_email}, All Rights Reserved. 
+-->
 <script setup lang="ts">
 
 </script>
@@ -10,6 +20,7 @@
     width: 50px;
     aspect-ratio: 1;
     display: grid;
+    z-index: 9999;
 }
 
 .loader::before,
