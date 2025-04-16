@@ -201,21 +201,41 @@ function scrollPd(hidden: boolean) {
     }
 }
 
-function contentRefScroll() {
-    if (contentRef.value && !userScroll.value) {
+function contentRefScroll(type?: string) {
+    if (type === 'bottom') {
         contentRef.value.scrollToBottom();
+    } else {
+        if (contentRef.value && !userScroll.value) {
+            contentRef.value.scrollToBottom();
+        }
     }
 }
 
-function daynamicScrollerScroll(e: any) {
+
+const oldScrollTop = ref(0)
+async function daynamicScrollerScroll(e: any) {
     if (userScroll.value) {
+        const diffTop = e.target.scrollTop - oldScrollTop.value
+        if (loading.value) {
+            const diffScrollHeight = contentRef.value.$el.scrollHeight - e.target.scrollTop
+            if (diffTop > 0) {
+                contentRef.value.$el.scrollTop = oldScrollTop.value + diffScrollHeight
+                oldScrollTop.value = e.target.scrollTop
+            } else {
+                contentRef.value.$el.scrollTop = e.target.scrollTop
+            }
+        } else {
+            contentRef.value.$el.scrollTop = e.target.scrollTop
+        }
         return
     }
     currentScrollTop.value = e.target.scrollTop
     if (currentScrollTop.value < prevScrollTop.value) {
         userScroll.value = true
+        oldScrollTop.value = e.target.scrollTop
     }
     prevScrollTop.value = currentScrollTop.value - 30
+
 }
 
 function errTipMsg(msg: string = '余额不足,无法继续对话,给作者打赏点吧!😭') {
@@ -290,7 +310,17 @@ async function sendMsgToDeepSeek() {
         }
         const debouncedPost = debounce((data) => worker.value.postMessage(data), 20);
         for await (const chunk of stream) {
-            const chunkContent = deepthink.value ? (chunk.choices[0].delta as any)?.reasoning_content || '' : chunk.choices[0]?.delta?.content || '';
+            let chunkContent
+            if (deepthink.value) {
+                const reasonContent = chunk.choices[0].delta.reasoning_content || ''
+                if (reasonContent) {
+                    chunkContent = reasonContent
+                } else {
+                    chunkContent = chunk.choices[0]?.delta?.content || ''
+                }
+            } else {
+                chunkContent = chunk.choices[0]?.delta?.content || ''
+            }
             if (chunkContent) {
                 buffer += chunkContent
                 debouncedPost({ buffer });
@@ -630,7 +660,7 @@ onBeforeUnmount(() => {
                     </div>
                     <div class="text-sm">我可以帮你写代码、写作等，请把你的任务交给我吧~</div>
                 </div>
-                <div v-if="userScroll && messageList.length > 0" @click.stop="contentRefScroll"
+                <div v-if="userScroll && messageList.length > 0" @click.stop="contentRefScroll('bottom')"
                     class="absolute z-50 right-6 bottom-0 select-none cursor-pointer w-8 h-8 rounded-full flex items-center justify-center dark:bg-[#404045] shadow bg-[#F3F4F6] hover:shadow-xl">
                     <img src="~/assets/icons/down.svg" class="w-4 h-4" alt="">
                 </div>
