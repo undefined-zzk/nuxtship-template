@@ -46,6 +46,8 @@ const currentScrollTop = ref(0)
 const sectionRef = ref()
 const TIMEOUT = 60 * 1000 // 60s
 const deepthink = ref(false)
+const isWheel = ref(false)
+const oldScrollTop = ref(0)
 let moveTimer: NodeJS.Timeout
 let timer: NodeJS.Timeout
 let controller: any = null;
@@ -204,6 +206,7 @@ function scrollPd(hidden: boolean) {
 function contentRefScroll(type?: string) {
     if (type === 'bottom') {
         contentRef.value.scrollToBottom();
+        isWheel.value = true
     } else {
         if (contentRef.value && !userScroll.value) {
             contentRef.value.scrollToBottom();
@@ -211,21 +214,20 @@ function contentRefScroll(type?: string) {
     }
 }
 
-
-const oldScrollTop = ref(0)
-async function daynamicScrollerScroll(e: any) {
+function daynamicScrollerScroll(e: any) {
     if (userScroll.value) {
-        const diffTop = e.target.scrollTop - oldScrollTop.value
-        if (loading.value) {
-            const diffScrollHeight = contentRef.value.$el.scrollHeight - e.target.scrollTop
-            if (diffTop > 0) {
-                contentRef.value.$el.scrollTop = oldScrollTop.value + diffScrollHeight
+        if (!loading.value) {
+            contentRef.value.$el.scrollTop = e.target.scrollTop
+        } else {
+            if (isWheel.value) {
+                contentRef.value.$el.scrollTop = e.target.scrollTop
                 oldScrollTop.value = e.target.scrollTop
             } else {
-                contentRef.value.$el.scrollTop = e.target.scrollTop
+                // contentRef.value.$el.scrollTo({
+                //     top: oldScrollTop.value,
+                //     behavior: 'smooth'
+                // })
             }
-        } else {
-            contentRef.value.$el.scrollTop = e.target.scrollTop
         }
         return
     }
@@ -235,7 +237,6 @@ async function daynamicScrollerScroll(e: any) {
         oldScrollTop.value = e.target.scrollTop
     }
     prevScrollTop.value = currentScrollTop.value - 30
-
 }
 
 function errTipMsg(msg: string = '余额不足,无法继续对话,给作者打赏点吧!😭') {
@@ -262,6 +263,7 @@ async function sendMsgToDeepSeek() {
         await nextTick()
         currentKey.value = getDialogKey()
         userScroll.value = false
+        isWheel.value = false
         prevScrollTop.value = 0
         currentScrollTop.value = 0
         controller = new AbortController();
@@ -312,7 +314,7 @@ async function sendMsgToDeepSeek() {
         for await (const chunk of stream) {
             let chunkContent
             if (deepthink.value) {
-                const reasonContent = chunk.choices[0].delta.reasoning_content || ''
+                const reasonContent = (chunk.choices[0].delta as any)?.reasoning_content || ''
                 if (reasonContent) {
                     chunkContent = reasonContent
                 } else {
@@ -548,6 +550,20 @@ async function copyCode(el: Element) {
     }, 1000)
 }
 
+let wheelTimer: any = null
+function contentAddEventWheel() {
+    contentRef.value.$el.addEventListener('mousewheel', wheelFn)
+    contentRef.value.$el.addEventListener('wheel', wheelFn)
+    contentRef.value.$el.addEventListener('touchmove', wheelFn)
+    function wheelFn() {
+        wheelTimer && clearTimeout(wheelTimer)
+        isWheel.value = true
+        wheelTimer = setTimeout(() => {
+            isWheel.value = false
+        }, 100)
+    }
+}
+
 onMounted(async () => {
     currentKey.value = getDialogKey()
     setDialogKey(currentKey.value)
@@ -556,12 +572,11 @@ onMounted(async () => {
         if (!cacheData[currentKey.value] || !Array.isArray(cacheData[currentKey.value])) {
             cacheData[currentKey.value] = []
         }
-
         messageList.value = (cacheData[currentKey.value] || []).map(item => ({ ...item, startLoading: false, copySuccess: false }))
         await nextTick()
         hljs.highlightAll()
+        contentAddEventWheel()
     } catch (e) {
-        console.log(e);
         messageList.value = []
     }
 })
@@ -599,7 +614,7 @@ onBeforeUnmount(() => {
                 </div>
             </header>
             <section ref="sectionRef"
-                class="w-full relative h-modalH rounded-md sm:p-0 md:p-2 overflow-x-hidden scrollbar"
+                class="w-full font-normal relative h-modalH rounded-md sm:p-0 md:p-2 overflow-x-hidden scrollbar"
                 :class="messageList.length == 0 ? 'flex flex-col items-center justify-center' : ''">
                 <DynamicScroller ref="contentRef" :buffer="1000" :items="messageList" :min-item-size="54"
                     class="h-full scrollbar" v-show="messageList.length > 0" @scroll.passive="daynamicScrollerScroll">

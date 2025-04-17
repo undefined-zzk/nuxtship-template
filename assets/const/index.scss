@@ -12,6 +12,15 @@ html.dark {
   --btn-text-color: #000000;
 }
 
-html {
+html,
+body {
   background-color: var(--bg-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  text-size-adjust: 100%; /* 防止iOS自动调整 */
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch; /* 新规范 */
+  scroll-behavior: smooth; /* 平滑滚动效果 */
 }
