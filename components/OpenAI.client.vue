@@ -543,12 +543,15 @@ function addLisEventCopyText() {
         item.addEventListener('click', () => copyCode(item))
     })
 }
+let isCopy = false
 // 复制code中的代码
 async function copyCode(el: Element) {
-    if (el.innerHTML === '复制成功') return
+    if (isCopy) return
+    isCopy = true
     const codeEl = el.parentNode?.parentNode?.querySelector('code')
     await copyToClipboard(codeEl?.innerHTML as string)
     el.innerHTML = '复制成功'
+    isCopy = false
     setTimeout(() => {
         el.innerHTML = '复制'
     }, 1000)
@@ -571,11 +574,12 @@ function contentAddEventWheel() {
 // 动态计算section的高度
 function comSectionHeigh() {
     const width = window.innerWidth
+    const height = window.innerHeight
     const h = width < 768 ? 10 : 40
     const headerHeight = headerRef.value.offsetHeight
     const footerHeight = footerRef.value.offsetHeight
     const modalPad = (+getComputedStyle(modalRef.value).paddingRight.replace('px', '')) * 2
-    sectionRef.value.style.height = `calc(100vh - ${headerHeight + footerHeight + modalPad + h}px)`
+    sectionRef.value.style.height = `calc(${height - headerHeight - footerHeight - modalPad - h}px)`
 }
 
 onMounted(async () => {

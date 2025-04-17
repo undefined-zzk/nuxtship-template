@@ -2,8 +2,10 @@
 </script>
 <template>
   <NuxtLayout>
-    <NuxtPage />
-    <OpenAI></OpenAI>
+    <el-config-provider :message="{ max: 1 }">
+      <NuxtPage />
+      <OpenAI></OpenAI>
+    </el-config-provider>
   </NuxtLayout>
 </template>
 
