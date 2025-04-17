@@ -44,6 +44,9 @@ const currentKey = ref()
 const prevScrollTop = ref(0)
 const currentScrollTop = ref(0)
 const sectionRef = ref()
+const headerRef = ref()
+const footerRef = ref()
+const modalRef = ref()
 const TIMEOUT = 60 * 1000 // 60s
 const deepthink = ref(false)
 const isWheel = ref(false)
@@ -87,6 +90,7 @@ watch(showAiModal, async () => {
                 ElMessage.error(e.message);
             }
         } finally {
+            comSectionHeigh()
             contentRefScroll()
             balLoading.value = false
             textareaRef.value?.focus()
@@ -564,6 +568,16 @@ function contentAddEventWheel() {
     }
 }
 
+// 动态计算section的高度
+function comSectionHeigh() {
+    const width = window.innerWidth
+    const h = width < 768 ? 10 : 40
+    const headerHeight = headerRef.value.offsetHeight
+    const footerHeight = footerRef.value.offsetHeight
+    const modalPad = (+getComputedStyle(modalRef.value).paddingRight.replace('px', '')) * 2
+    sectionRef.value.style.height = `calc(100vh - ${headerHeight + footerHeight + modalPad + h}px)`
+}
+
 onMounted(async () => {
     currentKey.value = getDialogKey()
     setDialogKey(currentKey.value)
@@ -595,10 +609,10 @@ onBeforeUnmount(() => {
             <img src="~/assets/icons/ai-assisant.svg" alt="" class="w-6 h-6 select-none">
             <div class="w-7 h-7 absolute opacity-0"></div>
         </div>
-        <div v-show="showAiModal"
+        <div v-show="showAiModal" ref="modalRef"
             class="sticky motion-safe:animate-opacity md:translate-x-1/2 z-10 right-0 bottom-0 bg-slate-600 dark:bg-[#292A2D] h-screen md:w-2/3 w-full p-3">
             <CssLoading v-if="balLoading"></CssLoading>
-            <header class="text-center select-none h-10 flex items-center justify-between gap-2">
+            <header ref="headerRef" class="text-center select-none h-10 flex items-center justify-between gap-2">
                 <div @click.stop="openAside(true)" class="flex items-center gap-x-2">
                     <img src="~/assets/icons/hamburger.svg" class="w-4 h-4 cursor-pointer" alt="">
                     <div class="w-4 h-4"></div>
@@ -614,7 +628,7 @@ onBeforeUnmount(() => {
                 </div>
             </header>
             <section ref="sectionRef"
-                class="w-full font-normal relative h-modalH rounded-md sm:p-0 md:p-2 overflow-x-hidden scrollbar"
+                class="w-full font-normal relative  rounded-md sm:p-0 md:p-2 overflow-x-hidden scrollbar"
                 :class="messageList.length == 0 ? 'flex flex-col items-center justify-center' : ''">
                 <DynamicScroller ref="contentRef" :buffer="1000" :items="messageList" :min-item-size="54"
                     class="h-full scrollbar" v-show="messageList.length > 0" @scroll.passive="daynamicScrollerScroll">
@@ -687,7 +701,7 @@ onBeforeUnmount(() => {
                 </div>
             </div>
             <!-- F3F4F6 -->
-            <footer
+            <footer ref="footerRef"
                 class="modal-footer fixed bottom-0 left-1/2 -translate-x-1/2 w-[90%] text-center sm:h-[160px] bg-[#F3F4F6] dark:bg-[#404045] p-3 rounded-md">
                 <textarea ref="textareaRef" maxlength="50000" :readonly="loading || balLoading"
                     placeholder="给 AI助手 Shunk-DeepSeek 发送消息"
