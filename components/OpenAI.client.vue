@@ -128,9 +128,9 @@ const copy = async (item: MessageListItem, field: 'content' | 'answer') => {
     }, 1000)
 }
 // 重新生成
-const refresh = async (item: MessageListItem) => {
+const refresh = async (item: MessageListItem, index: number) => {
     tempRefresh.value = ++item.refresh
-    messageList.value = messageList.value.filter(i => i.id !== item.id)
+    messageList.value.splice(index)
     textarea.value = ''
     tempTextarea.value = item.content
     sendMsgToDeepSeek()
@@ -677,7 +677,7 @@ onBeforeUnmount(() => {
                                                 v-if="(!item.startLoading && !item.copySuccess) || (!item.copySuccess && !loading)"
                                                 @click.stop="copy(item, 'answer')" class="w-6 h-6 cursor-pointer"
                                                 alt="">
-                                            <img v-if="!loading && !startLoading" @click="refresh(item)"
+                                            <img v-if="!loading && !startLoading" @click="refresh(item, index)"
                                                 src="~/assets/icons/refresh.svg" class="w-6 h-6 cursor-pointer" alt="">
                                         </div>
                                     </div>
