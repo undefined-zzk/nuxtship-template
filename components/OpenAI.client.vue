@@ -1,4 +1,5 @@
 <script setup lang="ts">
+
 import OpenAI from "openai";
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github-dark.css';
@@ -6,6 +7,8 @@ import { DynamicScroller } from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { orderBy, debounce } from 'lodash'
 import type { MessageListItem, Role, AsideDataItem } from '~/types'
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
 const aiRef = ref<HTMLElement>()
 const { style } = useDraggable(aiRef, {
     initialValue: {
@@ -583,6 +586,25 @@ function comSectionHeigh() {
 }
 
 onMounted(async () => {
+    const guide = getGuide()
+    if (guide) {
+        await nextTick()
+        const driverObj = driver({
+            showProgress: true,
+            nextBtnText: '下一步',
+            prevBtnText: '上一步',
+            doneBtnText: '完成',
+            progressText: '{{current}}/{{total}}',
+            onDestroyed: () => {
+                setGuide(false)
+            },
+            steps: [
+                { element: '#open-ai', popover: { title: 'AI助手', description: '点击我打开对话框进行对话', side: "left", align: 'start' } },
+                { element: '#language', popover: { title: '语言切换', description: '可以进行中英切换', side: "bottom", align: 'end' } },
+            ]
+        });
+        driverObj.drive();
+    }
     currentKey.value = getDialogKey()
     setDialogKey(currentKey.value)
     try {
@@ -607,7 +629,7 @@ onBeforeUnmount(() => {
 
 <template>
     <div :class="showAiModal ? `fixed bottom-0 right-0 overflow-hidden top-0 left-0 w-full h-full` : ''">
-        <div ref="aiRef" @mouseup="mouseUp" @touchend="mouseUp" :style="style" v-if="!showAiModal"
+        <div ref="aiRef" id="open-ai" @mouseup="mouseUp" @touchend="mouseUp" :style="style" v-if="!showAiModal"
             @click.stop="showModal"
             class="drag-ele fixed text-xs cursor-pointer z-50 flex justify-center items-center w-12 h-12 lg:w-14 lg:h-14 text-color bg-slate-100 shadow-lg dark:bg-[#292A2D] rounded-full">
             <img src="~/assets/icons/ai-assisant.svg" alt="" class="w-6 h-6 select-none">

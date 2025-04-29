@@ -36,12 +36,13 @@ const openUrl = () => {
 </script>
 
 <template>
-    <div class="flex items-center gap-x-2">
+    <div class="flex items-center gap-x-2" id="theme-github">
         <Icon name="tabler:moon" v-if="theme === 'dark'" class="cursor-pointer dark:text-white"
             @click="changeTheme('light')">
         </Icon>
         <Icon name="tabler:sun" v-else class="cursor-pointer" @click="changeTheme('dark')"></Icon>
-        <Icon name="tabler:brand-github-filled" class="cursor-pointer dark:text-white" @click="openUrl"></Icon>
+        <Icon name="tabler:brand-github-filled" class="cursor-pointer dark:text-white" @click="openUrl">
+        </Icon>
     </div>
 </template>
 

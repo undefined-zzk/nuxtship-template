@@ -72,7 +72,8 @@ watch(isOnline, () => {
         </div>
         <div class="lg:flex items-center gap-2 hidden">
             <ThemeBtn />
-            <div class="cursor-pointer text-color" @click="changeLang">{{ locale == 'en' ? '中文' : 'English' }}</div>
+            <div id="language" class="cursor-pointer text-color" @click="changeLang">{{ locale == 'en' ? '中文' :
+                'English' }}</div>
             <div class="text-color">{{ $t('btn.login') }}</div>
             <div
                 class="bg-btn cursor-pointer rounded-md h-10 leading-10 px-5 bg-text-color hover:bg-slate-700 hover:text-white">
